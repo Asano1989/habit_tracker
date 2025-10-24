@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>習慣トラッカー</title>
+    <title>Spring Bootアプリケーション</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -31,10 +31,10 @@
 </head>
 <body>
     <div class="container">
-        <h1>🎯 習慣トラッカー</h1>
+        <h1>🎯 アプリケーション試作</h1>
         <p th:text="${message}"></p>
         <div class="success">
-            ✅ homeページへようこそ
+            ✅ <a th:href="@{/todo}">ToDoアプリへ</a>
         </div>
     </div>
 </body>
