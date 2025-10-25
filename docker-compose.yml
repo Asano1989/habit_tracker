@@ -1,30 +1,13 @@
 version: '3.8'
 services:
-  db:
-    image: postgres:15
-    environment:
-      POSTGRES_DB: habit_tracker_db
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password
-    ports:
-      - "5432:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-      - ./init-scripts:/docker-entrypoint-initdb.d
-
   app:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
     ports:
       - "8080:8080"
-    depends_on:
-      - db
     environment:
-      # Docker Compose統合を無効化
-      SPRING_DOCKER_COMPOSE_ENABLED: 0
-      # データベース接続設定
-      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/habit_tracker_db
-      SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD: password
-
-volumes:
-  postgres_data:
+      SPRING_PROFILES_ACTIVE: prod
+      SPRING_DATASOURCE_URL: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}
+      SPRING_DATASOURCE_USERNAME: ${DB_USER}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
