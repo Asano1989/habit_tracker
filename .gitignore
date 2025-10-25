@@ -1,5 +1,4 @@
 HELP.md
-target/
 .mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
@@ -29,5 +28,60 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
-### VS Code ###
+# ==============================
+# Maven build outputs
+# ==============================
+/app/target/
+/target/
+**/target/
+
+# ==============================
+# IntelliJ / VS Code / Eclipse IDE
+# ==============================
+.idea/
 .vscode/
+*.iml
+*.classpath
+*.project
+*.settings/
+
+# ==============================
+# Logs / Temp files
+# ==============================
+*.log
+logs/
+tmp/
+*.tmp
+
+# ==============================
+# System / OS files
+# ==============================
+.DS_Store
+Thumbs.db
+
+# ==============================
+# Docker
+# ==============================
+# Compose volumes
+postgres_data/
+postgres_data_dev/
+**/docker-entrypoint-initdb.d/*
+!**/docker-entrypoint-initdb.d/*.sql  # ← SQL初期化スクリプトをコミットする場合は除外例
+
+# Build cache and layer exports
+**/.dockerignore
+**/node_modules/
+**/build/
+**/dist/
+**/__pycache__/
+
+# ==============================
+# Environment / Secrets
+# ==============================
+.env
+.env.*
+*.env.local
+*.env.dev
+*.env.prod
+
+.m2/
