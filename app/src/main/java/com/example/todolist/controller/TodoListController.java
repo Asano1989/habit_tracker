@@ -3,9 +3,11 @@ package com.example.todolist.controller;
 import java.util.List;
 
 import javax.naming.Binding;
+import jakarta.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -14,6 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.ui.Model;
 import com.example.todolist.entity.Todo;
 import com.example.todolist.form.TodoData;
+import com.example.todolist.form.TodoQuery;
 import com.example.todolist.repository.TodoRepository;
 import com.example.todolist.service.TodoService;
 import lombok.AllArgsConstructor;
@@ -21,8 +24,11 @@ import lombok.AllArgsConstructor;
 @Controller
 @AllArgsConstructor
 public class TodoListController {
-    private final TodoRepository TodoRepository;
+    private final TodoRepository todoRepository;
     private final TodoService todoService;
+
+    // 8章で追加
+    private final HttpSession session;
 
     @GetMapping("/")
     public String home(Model model) {
@@ -35,10 +41,38 @@ public class TodoListController {
     // ToDO一覧表示
     @GetMapping("/todo")
     public ModelAndView showTodoList(ModelAndView mv) {
+        // 一覧を検索して表示する
         mv.setViewName("todoList");
-        List<Todo> todoList = TodoRepository.findAll();
+        List<Todo> todoList = todoRepository.findAll();
         mv.addObject("todoList", todoList);
+        mv.addObject("todoQuery", new TodoQuery());         // ※9章で追加
         return mv;
+    }
+
+    // 9章で追加：ToDoを検索
+    @PostMapping("/todo/query")
+    public ModelAndView queryTodo(@ModelAttribute TodoQuery todoQuery,      // 1.
+                                    BindingResult result,                   // 2.
+                                    ModelAndView mv) {
+        mv.setViewName("todoList");
+        List<Todo> todoList = null;
+        if (todoService.isValid(todoQuery, result)) {                      // 3.
+            // エラーが無ければ検索
+            todoList = todoService.doQuery(todoQuery);                     // 4.
+        }
+        // mv.addObject("todoQuery", todoQuery);                            // 5.
+        mv.addObject("todoList", todoList);                                 // 6.
+        return mv;
+    }
+
+    // 8章で追加：ToDo一覧画面から更新・削除対象のToDoを選ぶ
+    @GetMapping("/todo/{id}")
+    public ModelAndView todoById(@PathVariable(name="id") int id, ModelAndView mv) {
+            mv.setViewName("todoForm");
+            Todo todo = todoRepository.findById(id).get();  // 1.
+            mv.addObject("todoData", todo);                 // ※b
+            session.setAttribute("mode", "update");         // 2.
+            return mv;
     }
 
     // ToDoフォーム表示
@@ -46,28 +80,54 @@ public class TodoListController {
     @GetMapping("/todo/create")
     public ModelAndView createTodo(ModelAndView mv) {
         mv.setViewName("todoForm");                  // 1.
-        mv.addObject("todoData", new TodoData());   // 2.
+        mv.addObject("todoData", new TodoData());   // ※a
+        session.setAttribute("mode", "create");     // 3.
         return mv;
     }
 
     // ToDo追加処理
     // 処理2. ToDo入力画面（todoForm.html）で「登録」ボタンがクリックされたとき
     @PostMapping("/todo/create")
-    public ModelAndView createTodo(@ModelAttribute @Validated TodoData todoData,  //3.
-                                    BindingResult result, ModelAndView mv) {
+    public String createTodo(@ModelAttribute @Validated TodoData todoData,  // 3.
+                                    BindingResult result, Model model) {    // 8章：ModelAndViewではなくModelに
         // エラーチェック
         boolean isValid = todoService.isValid(todoData, result);    // 4.
         if(!result.hasErrors() && isValid) {
             // エラーなし
             Todo todo = todoData.toEntity();        // 5.
-            TodoRepository.saveAndFlush(todo);
-            return showTodoList(mv);
+            todoRepository.saveAndFlush(todo);
+            return "redirect:/todo";
         } else {
-            // エラーアリ
-            mv.setViewName("todoForm");             // 6.
-            // mv.addObject("todoData", todoData);
-            return mv;
+            // エラーあり
+            // mv.setViewName("todoForm");              6. ：8章で削除
+            // model.addAttribute("todoData", todoData);
+            return "todoForm";
         }
+    }
+
+    // 8章で追加：更新用のメソッド
+    @PostMapping("/todo/update")
+    public String updateTodo(@ModelAttribute @Validated TodoData todoData,
+                                    BindingResult result, Model model) {
+        // エラーチェック
+        boolean isValid = todoService.isValid(todoData, result);
+        if(!result.hasErrors() && isValid) {
+            // エラーなし
+            Todo todo = todoData.toEntity();
+            todoRepository.saveAndFlush(todo);        // 1.
+            return "redirect:/todo";
+        } else {
+            // エラーあり
+            // model.addAttribute("todoData", todoData);
+            return "todoForm";
+        }
+    }
+
+    // 8章で追加：削除用のメソッド
+    @PostMapping("/todo/delete")
+    public String deleteTodo(@ModelAttribute TodoData todoData) {
+        todoRepository.deleteById(todoData.getId());
+        return "redirect:/todo";
     }
 
     // ToDo一覧へ戻る

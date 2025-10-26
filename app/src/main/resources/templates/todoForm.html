@@ -8,6 +8,15 @@
   <body>
     <form th:action="@{/}" method="post" th:object="${todoData}">
       <table>
+        <!-- 8章で追加 開始 -->
+        <tr>
+          <th>id</th>
+          <td>
+            <span th:text ="*{id}"></span>
+            <input type ="hidden" th:field ="*{id}"> <!-- 1. -->
+          </td>
+        </tr>
+        <!-- 8章で追加 終了 -->
         <tr>
           <th>件名</th>
           <td>
@@ -49,10 +58,17 @@
           </td>
         </tr>
       </table>
-      <div>
-        <button type="submit" th:formaction="@{/todo/create}">登録</button>
+      <!-- 8章で変更 開始 -->
+      <div th:if="${session.mode == 'update'}"> <!-- 2. -->
+        <button type="submit" th:formaction="@{/todo/update}">更新</button>
+        <button type="submit" th:formaction="@{/todo/delete}">削除</button>
         <button type="submit" th:formaction="@{/todo/cancel}">キャンセル</button>
       </div>
+      <div th:unless="${session.mode == 'update'}"> <!-- 2. 3. -->
+        <button type="submit" th:formaction="@{/todo/create/do}">登録</button> <!-- 9章で変更 -->
+        <button type="submit" th:formaction="@{/todo/cancel}">キャンセル</button>
+      </div>
+      <!-- 8章で変更 終了 -->
     </form>
   </body>
 </html>
