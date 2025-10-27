@@ -69,27 +69,70 @@ public class TodoListController {
         return mv;
     }
 
-    // フォームに入力された条件でToDoを検索：9章で追加、10章・11章で変更
+
     @PostMapping("/todo/query")
-    public ModelAndView queryTodo(@ModelAttribute TodoQuery todoQuery,
-                                    BindingResult result,
-                                    ModelAndView mv) {
+    public String queryTodoPost(
+            @ModelAttribute TodoQuery todoQuery,
+            HttpSession session) {
+
+        // 1. リクエストで受け取った新しい検索条件をセッションに保存（上書き）
+        session.setAttribute("todoQuery", todoQuery);
+
+        // 2. GETメソッドにリダイレクトして検索を実行させる
+        //    これにより、ページネーションリンクと同じURLで表示される
+        return "redirect:/todo/query"; 
+    }
+
+    @GetMapping("/todo/query")
+    public ModelAndView queryTodoGet(
+            @PageableDefault(page = 0, size = 5) Pageable pageable,
+            HttpSession session,
+            ModelAndView mv) {
+        
         mv.setViewName("todoList");
-        List<Todo> todoList = null;
-        if (todoService.isValid(todoQuery, result)) {
-            // エラーがなければ検索
-            // todoList = todoQueryService.query(todoQuery);
-            // ↓
-            // JPQLによる検索
-            todoList = todoDaoImpl.findByJPQL(todoQuery);   //　④
-            }
-        //mv.addObject("todoQuery", todoQuery);
-        mv.addObject("todoList", todoList);
+
+        // 1. セッションから条件を取得
+        TodoQuery todoQuery = (TodoQuery) session.getAttribute("todoQuery");
+        // ※ セッションに条件がない場合は、新規の空のTodoQueryを使うなどのエラーハンドリングが必要
+        if (todoQuery == null) {
+            todoQuery = new TodoQuery();
+            session.setAttribute("todoQuery", todoQuery);
+        }
+        
+        // 2. セッションの条件とページネーション情報で検索を実行
+        Page<Todo> todoPage = todoDaoImpl.findByJPQL(todoQuery, pageable);
+
+        mv.addObject("todoQuery", todoQuery);      // 検索条件表示用
+        mv.addObject("todoPage", todoPage);        // Page情報
+        mv.addObject("todoList", todoPage.getContent()); // 検索結果リスト
+
         return mv;
     }
 
+    /*
+    // フォームに入力された条件でToDoを検索：9章で追加、10章・11章で変更
+    @PostMapping("/todo/query")
+    public ModelAndView queryTodo(@ModelAttribute TodoQuery todoQuery, @PageableDefault(page = 0, size = 5) Pageable pageable,     // 1.
+                                    ModelAndView mv, HttpSession session) {
+        // リクエストで受け取った検索条件をセッションに保存（上書き）
+        session.setAttribute("todoQuery", todoQuery);
+        
+        // セッションから検索条件を取得し、検索処理へ
+        TodoQuery sessionTodoQuery = (TodoQuery) session.getAttribute("todoQuery");
+
+        Page<Todo> todoPage = todoDaoImpl.findByJPQL(todoQuery, pageable);
+
+        mv.setViewName("todoList");
+        mv.addObject("todoQuery", todoQuery);           // 検索条件表示用
+        mv.addObject("todoPage", todoPage);              // page情報
+        mv.addObject("todoList", todoPage.getContent());    // 検索結果
+
+        return mv;
+    }
+    */
+
     // 8章で追加：ToDo一覧画面から更新・削除対象のToDoを選ぶ
-    @GetMapping("/todo/{id}")
+    @GetMapping("/todo/detail/{id}")
     public ModelAndView todoById(@PathVariable(name="id") int id, ModelAndView mv) {
             mv.setViewName("todoForm");
             Todo todo = todoRepository.findById(id).get();  // 1.
