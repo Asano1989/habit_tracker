@@ -1,4 +1,4 @@
-package com.example.habittracker.controller;
+package com.example.learningtracker.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

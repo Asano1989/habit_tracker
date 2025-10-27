@@ -14,7 +14,7 @@ FROM eclipse-temurin:17-jdk-jammy
 
 WORKDIR /app
 
-COPY --from=builder /app/target/habit_tracker-0.0.1-SNAPSHOT.jar app.jar
+COPY --from=builder /app/target/learning_tracker-0.0.1-SNAPSHOT.jar app.jar
 
 ENV SPRING_PROFILES_ACTIVE=prod
 EXPOSE 8080

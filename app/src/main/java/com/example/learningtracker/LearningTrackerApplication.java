@@ -1,13 +1,13 @@
-package com.example.habittracker;
+package com.example.learningtracker;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 // @SpringBootApplication
-public class HabitTrackerApplication {
+public class LearningTrackerApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(HabitTrackerApplication.class, args);
+		SpringApplication.run(LearningTrackerApplication.class, args);
 	}
 
 }

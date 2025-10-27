@@ -10,10 +10,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.example</groupId>
-	<artifactId>habit_tracker</artifactId>
+	<artifactId>learning_tracker</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>habit_tracker</name>
-	<description>habit_tracker project for Spring Boot</description>
+	<name>learning_tracker</name>
+	<description>learning_tracker project for Spring Boot</description>
 	<url/>
 	<licenses>
 		<license/>

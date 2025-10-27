@@ -4,7 +4,7 @@ services:
   db:
     image: postgres:15
     environment:
-      POSTGRES_DB: habit_tracker_db
+      POSTGRES_DB: learning_tracker_db
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
     ports:
@@ -24,7 +24,7 @@ services:
       - ~/.m2:/root/.m2
       - ./app/target/classes:/app/target/classes
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/habit_tracker_db
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/learning_tracker_db
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: password
       SPRING_DEVTOOLS_RESTART_ENABLED: "true"
