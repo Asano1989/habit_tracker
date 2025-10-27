@@ -6,9 +6,9 @@
   <link th:href="@{/css/style.css}" rel="stylesheet" type="text/css">
 </head>
 <body>
-  <!-- Todolist4で追加 開始 -->
+  <!-- 9章で追加 開始 -->
   <form th:action="@{/}" method="post" th:object="${todoQuery}"><!-- 1. -->
-    <div style=" display: flex">
+    <div style="display: flex">
       <table border="1">
         <tr>
           <th>件名</th>
@@ -48,7 +48,7 @@
     <div th:if="${#fields.hasErrors('deadlineTo')}" th:errors="*{deadlineTo}" th:errorclass="red"></div>
     <hr><button type="submit" th:formaction="@{/todo/create/form}">新規追加</button>
   </form>
-  <!-- Todolist4で追加 終了 -->
+  <!-- 9章で追加 終了 -->
   <table border="1">
     <tr>
       <th>id</th>

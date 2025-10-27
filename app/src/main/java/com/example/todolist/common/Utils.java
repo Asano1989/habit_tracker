@@ -11,7 +11,7 @@ public class Utils {
     public static Date str2date(String s) {
         long ms = 0;
         try {
-          ms = sdf.parse( s).getTime();
+          ms = sdf.parse(s).getTime();
         } catch (ParseException e) {
           e.printStackTrace();
         }
