@@ -16,13 +16,18 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.data.domain.Page;
 import org.springframework.ui.Model;
+
 import com.example.todolist.entity.Todo;
 import com.example.todolist.form.TodoData;
 import com.example.todolist.form.TodoQuery;
 import com.example.todolist.repository.TodoRepository;
 import com.example.todolist.service.TodoService;
 import com.example.todolist.dao.TodoDaoImpl;
+
 import lombok.RequiredArgsConstructor;
 
 @Controller
@@ -53,16 +58,18 @@ public class TodoListController {
 
     // ToDO一覧表示
     @GetMapping("/todo")
-    public ModelAndView showTodoList(ModelAndView mv) {
-        // 一覧を検索して表示する
+    public ModelAndView showTodoList(ModelAndView mv, @PageableDefault(page = 0, size = 5, sort = "id") Pageable pageable) {  // 1.
         mv.setViewName("todoList");
-        List<Todo> todoList = todoRepository.findAll();
-        mv.addObject("todoList", todoList);
-        mv.addObject("todoQuery", new TodoQuery());         // ※9章で追加
+
+        Page<Todo> todoPage = todoRepository.findAll(pageable);            // 2., 3.
+        mv.addObject("todoQuery", new TodoQuery());                         // ※9章で追加
+        mv.addObject("todoPage", todoPage);                                 // 4.
+        mv.addObject("todoList", todoPage.getContent());                    // 5.
+        session.setAttribute("todoQuery", new TodoQuery());                 // 6.
         return mv;
     }
 
-    // フォームに入力された条件でToDoを検索：9章で追加、10章で変更
+    // フォームに入力された条件でToDoを検索：9章で追加、10章・11章で変更
     @PostMapping("/todo/query")
     public ModelAndView queryTodo(@ModelAttribute TodoQuery todoQuery,
                                     BindingResult result,
@@ -74,13 +81,12 @@ public class TodoListController {
             // todoList = todoQueryService.query(todoQuery);
             // ↓
             // JPQLによる検索
-            todoList = todoDaoImpl.findByJPQL(todoQuery);               // 4.
-        }
+            todoList = todoDaoImpl.findByJPQL(todoQuery);   //　④
+            }
         //mv.addObject("todoQuery", todoQuery);
         mv.addObject("todoList", todoList);
         return mv;
     }
-
 
     // 8章で追加：ToDo一覧画面から更新・削除対象のToDoを選ぶ
     @GetMapping("/todo/{id}")
