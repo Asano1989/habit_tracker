@@ -1,4 +1,4 @@
-package com.example.todolist.entity;
+package com.example.learningtracker.todolist.entity;
 
 import java.sql.Date;
 import jakarta.persistence.Column;

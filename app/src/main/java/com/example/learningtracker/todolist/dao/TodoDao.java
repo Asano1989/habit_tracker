@@ -1,10 +1,10 @@
-package com.example.todolist.dao;
+package com.example.learningtracker.todolist.dao;
 
 import java.util.List;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Page;
-import com.example.todolist.entity.Todo;
-import com.example.todolist.form.TodoQuery;
+import com.example.learningtracker.todolist.entity.Todo;
+import com.example.learningtracker.todolist.form.TodoQuery;
 
 public interface TodoDao {
   // JPQLによる検索

@@ -1,4 +1,4 @@
-package com.example.todolist.service;
+package com.example.learningtracker.todolist.service;
 
 import java.time.DateTimeException;
 import java.time.LocalDate;
@@ -6,11 +6,11 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import com.example.todolist.common.Utils;
-import com.example.todolist.entity.Todo;
-import com.example.todolist.form.TodoData;
-import com.example.todolist.form.TodoQuery;
-import com.example.todolist.repository.TodoRepository;
+import com.example.learningtracker.todolist.common.Utils;
+import com.example.learningtracker.todolist.entity.Todo;
+import com.example.learningtracker.todolist.form.TodoData;
+import com.example.learningtracker.todolist.form.TodoQuery;
+import com.example.learningtracker.todolist.repository.TodoRepository;
 
 import lombok.AllArgsConstructor;
 

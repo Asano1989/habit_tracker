@@ -1,8 +1,5 @@
-package com.example.todolist.controller;
+package com.example.learningtracker.todolist.controller;
 
-import java.util.List;
-
-import javax.naming.Binding;
 import jakarta.servlet.http.HttpSession;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -21,12 +18,12 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.data.domain.Page;
 import org.springframework.ui.Model;
 
-import com.example.todolist.entity.Todo;
-import com.example.todolist.form.TodoData;
-import com.example.todolist.form.TodoQuery;
-import com.example.todolist.repository.TodoRepository;
-import com.example.todolist.service.TodoService;
-import com.example.todolist.dao.TodoDaoImpl;
+import com.example.learningtracker.todolist.entity.Todo;
+import com.example.learningtracker.todolist.form.TodoData;
+import com.example.learningtracker.todolist.form.TodoQuery;
+import com.example.learningtracker.todolist.repository.TodoRepository;
+import com.example.learningtracker.todolist.service.TodoService;
+import com.example.learningtracker.todolist.dao.TodoDaoImpl;
 
 import lombok.RequiredArgsConstructor;
 
@@ -47,13 +44,6 @@ public class TodoListController {
     @PostConstruct                              // 3.
     public void init() {
         todoDaoImpl = new TodoDaoImpl(entityManager);
-    }
-
-    @GetMapping("/")
-    public String home(Model model) {
-        String message = "Hello, World!!";
-        model.addAttribute("message", message);
-        return "home";
     }
 
     // ToDO一覧表示

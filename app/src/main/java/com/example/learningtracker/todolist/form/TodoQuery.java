@@ -1,4 +1,4 @@
-package com.example.todolist.form;
+package com.example.learningtracker.todolist.form;
 
 import lombok.Data;
 

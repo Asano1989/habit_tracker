@@ -1,9 +1,9 @@
-package com.example.todolist.form;
+package com.example.learningtracker.todolist.form;
 
 import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import com.example.todolist.entity.Todo;
+import com.example.learningtracker.todolist.entity.Todo;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

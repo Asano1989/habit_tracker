@@ -1,4 +1,4 @@
-package com.example.todolist.dao;
+package com.example.learningtracker.todolist.dao;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,9 +6,9 @@ import java.util.List;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import com.example.todolist.common.Utils;
-import com.example.todolist.entity.Todo;
-import com.example.todolist.form.TodoQuery;
+import com.example.learningtracker.todolist.common.Utils;
+import com.example.learningtracker.todolist.entity.Todo;
+import com.example.learningtracker.todolist.form.TodoQuery;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.Query;
