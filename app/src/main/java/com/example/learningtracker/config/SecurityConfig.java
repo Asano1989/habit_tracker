@@ -2,6 +2,7 @@ package com.example.learningtracker.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -17,12 +18,31 @@ public class SecurityConfig {
         .permitAll()) //  フォーム認証画面は認証不要
         .authorizeHttpRequests(authz -> authz
             .requestMatchers("/css/**").permitAll() // CSSファイルは認証不要
-            .requestMatchers("/todo", "/todo/**").permitAll()
+            .requestMatchers("/todo").permitAll()
             .requestMatchers("/").permitAll() //  トップページは認証不要
             .anyRequest().authenticated() //  他のURLはログイン後アクセス可能
+        )
+        .formLogin(form -> form
+            .usernameParameter("userId")
+            .passwordParameter("password")
+            .loginProcessingUrl("/login")
+            .permitAll()
+        )
+            .logout(logout -> logout
+                .logoutUrl("/logout")
+                .permitAll()
         );
 
         return http.build();
+    }
+
+    // LoginUserDetailServiceとBCryptPasswordEncoderを使うよう設定
+    @Bean
+    public DaoAuthenticationProvider authenticationProvider(LoginUserDetailService userDetailsService, PasswordEncoder passwordEncoder) {
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+        authProvider.setUserDetailsService(userDetailsService); // 💡 これが必要
+        authProvider.setPasswordEncoder(passwordEncoder);       // 💡 これが必要
+        return authProvider;
     }
 
     @Bean
