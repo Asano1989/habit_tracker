@@ -1,7 +1,22 @@
 DROP TABLE IF EXISTS users;
 CREATE TABLE users (
     id              SERIAL          PRIMARY KEY,
-    user_id          VARCHAR(100)    UNIQUE NOT NULL,
+    account_id      VARCHAR(100)    UNIQUE NOT NULL,
     password        VARCHAR(255)    NOT NULL,
     name            VARCHAR(100)    NOT NULL
+);
+DROP TABLE IF EXISTS learning_subjects;
+CREATE TABLE learning_subjects (
+    id              SERIAL          PRIMARY KEY,
+    user_id         VARCHAR(100)    NOT NULL,
+    name            VARCHAR(500)    UNIQUE NOT NULL
+);
+DROP TABLE IF EXISTS todo;
+CREATE TABLE todo (
+    id          SERIAL PRIMARY KEY,
+    title       TEXT,
+    importance  INTEGER,
+    urgency     INTEGER,
+    deadline    DATE,
+    done        TEXT
 );
