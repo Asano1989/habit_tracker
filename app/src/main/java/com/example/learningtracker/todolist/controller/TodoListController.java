@@ -133,7 +133,7 @@ public class TodoListController {
 
     // ToDoフォーム表示
     // 処理1. ToDo一覧画面（todoList.html）で「新規追加」リンクがクリックされたとき
-    @GetMapping("/todo/create")
+    @PostMapping("/todo/create/form")
     public ModelAndView createTodo(ModelAndView mv) {
         mv.setViewName("todoForm");                  // 1.
         mv.addObject("todoData", new TodoData());   // ※a
@@ -143,7 +143,7 @@ public class TodoListController {
 
     // ToDo追加処理
     // 処理2. ToDo入力画面（todoForm.html）で「登録」ボタンがクリックされたとき
-    @PostMapping("/todo/create")
+    @PostMapping("/todo/create/do")
     public String createTodo(@ModelAttribute @Validated TodoData todoData,  // 3.
                                     BindingResult result, Model model) {    // 8章：ModelAndViewではなくModelに
         // エラーチェック
