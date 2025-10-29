@@ -1,8 +1,156 @@
 @charset "UTF-8";
 
+/* Color variables - moegi and kihada */
+:root {
+  --moegi: #7ba23f;
+  --kihada: #fbe251;
+  --moegi-dark: #6a8f38;
+  --kihada-dark: #e5cd3d;
+}
+
+/* Body styling */
 body {
-  margin: 20px;
-  font-size: 14px;
+  background-color: #f8f9fa;
+  min-height: 100vh;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Card styling with rounded corners */
+.card {
+  border: none;
+  border-radius: 20px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+/* Card header with gradient from moegi to kihada */
+.card-header {
+  background: linear-gradient(135deg, var(--moegi) 0%, var(--kihada) 100%);
+  color: #2c3e50;
+  padding: 2.625rem;
+  text-align: center;
+  border: none;
+}
+
+.card-header h1 {
+  margin: 0;
+  font-size: 1.75rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+/* Card body padding */
+.card-body {
+  padding: 2.5rem;
+  background-color: white;
+}
+
+/* Form labels */
+.form-group label {
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+}
+
+/* Form inputs with rounded corners */
+.form-control {
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+/* Focus state with moegi color */
+.form-control:focus {
+  border-color: var(--moegi);
+  box-shadow: 0 0 0 0.2rem rgba(123, 162, 63, 0.25);
+  outline: none;
+}
+
+/* Button with gradient and bold text */
+.btn-gradient {
+  background: linear-gradient(135deg, var(--moegi) 0%, var(--kihada) 100%);
+  border: none;
+  color: #2c3e50;
+  border-radius: 12px;
+  padding: 0.875rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  transition: all 0.3s ease;
+}
+
+.btn-gradient:hover {
+  background: linear-gradient(135deg, var(--moegi-dark) 0%, var(--kihada-dark) 100%);
+  color: #2c3e50;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(123, 162, 63, 0.4);
+}
+
+.btn-gradient:active {
+  transform: translateY(0);
+}
+
+.btn-gradient:focus {
+  box-shadow: 0 0 0 0.2rem rgba(123, 162, 63, 0.25);
+  color: #2c3e50;
+}
+
+/* Alert styling */
+.alert {
+  border-radius: 12px;
+}
+
+/* Home link styling */
+.home-link {
+  text-align: center;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #e0e0e0;
+}
+
+.home-link a {
+  color: var(--moegi);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.home-link a:hover {
+  color: var(--moegi-dark);
+}
+
+.home-link a::before {
+  content: "←";
+  font-size: 1.2rem;
+}
+
+/* Text color utility */
+.text-moegi {
+  color: var(--moegi) !important;
+}
+
+a.text-moegi:hover {
+  color: var(--moegi-dark) !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 576px) {
+  .card-body {
+    padding: 1.5rem;
+  }
+
+  .card-header {
+    padding: 1.5rem;
+  }
+
+  .card-header h1 {
+    font-size: 1.5rem;
+  }
 }
 
 table {
@@ -42,4 +190,3 @@ button {
 #nav li {
   margin-right: 10px;
 }
-
