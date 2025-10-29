@@ -10,12 +10,11 @@
 <body class="bg-light">
   <div class="container">
     <div class="row justify-content-center align-items-center min-vh-100 py-5">
-      <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+      <div class="col-12 col-md-7 col-lg-5 col-xl-4">
         <div class="card shadow border-0">
           <div class="card-header text-center border-0">
             <h1 class="mb-0">ユーザー登録</h1>
           </div>
-          
           <div class="card-body">
             <div th:if="${signupError}" class="alert alert-danger" role="alert" th:text="${signupError}"></div>
             <div th:if="${accountIdError}" class="alert alert-danger" role="alert" th:text="${accountIdError}"></div>
@@ -64,7 +63,7 @@
               </div>
               
               <!-- Button now uses btn-gradient class with moegi to kihada gradient from external CSS -->
-              <button type="submit" class="btn btn-gradient btn-lg btn-block">登録</button>
+              <button type="submit" class="btn btn-gradient btn-lg btn-block">新規登録</button>
             </form>
             
             <div class="home-link">
@@ -75,8 +74,6 @@
       </div>
     </div>
   </div>
-  
-  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>
