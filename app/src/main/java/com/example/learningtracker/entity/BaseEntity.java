@@ -7,13 +7,13 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDateTime;
-import lombok.Getter;
-import lombok.Setter;
+import java.util.Date;
 
-@Getter
-@Setter
-@MappedSuperclass // このクラスのフィールドを継承先のテーブルにマッピングする
-@EntityListeners(AuditingEntityListener.class) // タイムスタンプの自動更新を有効化
+import lombok.Data;
+
+@Data
+@MappedSuperclass                               // このクラスのフィールドを継承先のテーブルにマッピングする
+@EntityListeners(AuditingEntityListener.class)  // タイムスタンプの自動更新を有効化
 public abstract class BaseEntity {
 
     @CreatedDate

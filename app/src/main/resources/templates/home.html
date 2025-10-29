@@ -33,7 +33,14 @@
     <div class="container">
         <h1>🎯 アプリケーション試作</h1>
         <p th:text="${message}"></p>
-        <div class="success">
+        <div sec:authorize="isAnonymous()">
+            ✏ <a th:href="@{/signup}">新規登録</a>
+             🚪 <a th:href="@{/login}">ログイン</a>
+        </div>
+        <div sec:authorize="isAuthenticated()">
+            🏃 <a th:href="@{/logout}">ログアウト</a>
+        </div>
+        <div class="to_todo">
             ✅ <a th:href="@{/todo}">ToDoアプリへ</a>
         </div>
     </div>

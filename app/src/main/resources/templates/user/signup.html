@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <title>ユーザー登録</title>
+</head>
+  <h1 class="heading">ユーザー登録</h1>
+    <div th:if="${signupError}" th:text="${signupError}" style="color: red;"></div>
+    <div th:if="${accountIdError}" th:text="${accountIdError}" style="color: red;"></div>
+    <form method="post" th:action="@{/signup}" th:object="${userForm}">
+      <div class="form"
+        <label for="accountId">ユーザー名</label>
+        <input type="text" id="accountId" name="accountId" th:value="${userForm.accountId}"><br>
+        <div th:if="${#fields.hasErrors('accountId')}" th:errors="${userForm.accountId}" style="color: red;"></div>
+        <label for="password">パスワード</label>
+        <input type="password" id="password" name="password" th:value="${userForm.password}"><br>
+        <div th:if="${#fields.hasErrors('password')}" th:errors="${userForm.password}" style="color: red;"></div>
+        <label for="name">名前</label>
+        <input type="name" id="name" name="name" th:value="${userForm.name}"><br>
+        <div th:if="${#fields.hasErrors('name')}" th:errors="${userForm.name}" style="color: red;"></div>
+        <button type="submit">登録</button>
+    </form>
+  <div class="link">
+    <a href="/">トップ画面</a>
+  </div>
+</body>
+</html>
