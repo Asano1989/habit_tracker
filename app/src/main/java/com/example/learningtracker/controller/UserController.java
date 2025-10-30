@@ -137,7 +137,7 @@ public class UserController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.isAuthenticated() && !(authentication.getPrincipal() instanceof String)) {
             mav.addObject("message", "ようこそ、" + authentication.getName() + "さん！");
-            mav.setViewName("/user/userHome");
+            mav.setViewName("user/userHome");
             return mav;
         } else {
             model.addAttribute("message", "ログインしてください");
