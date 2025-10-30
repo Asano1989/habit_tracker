@@ -25,6 +25,7 @@ public class UserForm implements Serializable {
     @Pattern(regexp="[^\\s|　]+", message="名前に空白文字を含めることはできません")
     private String name;
 
+    /* 
     public String getAccountId() {
         return accountId;
     }
@@ -43,4 +44,5 @@ public class UserForm implements Serializable {
     public void setName(String name) {
         this.name = name;
     }
+    */
 }

@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.security.web.savedrequest.SavedRequest;
@@ -15,6 +16,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.learningtracker.controller.form.UserForm;
@@ -27,6 +29,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 import com.example.learningtracker.config.LoginUserDetailService;
+import com.example.learningtracker.config.LoginUserDetails;
 
 
 @Controller
@@ -127,5 +130,19 @@ public class UserController {
             return "redirect:/";
         }
         return "home";
+    }
+
+    @GetMapping("/home")
+    public ModelAndView home(Model model, ModelAndView mav) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated() && !(authentication.getPrincipal() instanceof String)) {
+            mav.addObject("message", "ようこそ、" + authentication.getName() + "さん！");
+            mav.setViewName("/user/userHome");
+            return mav;
+        } else {
+            model.addAttribute("message", "ログインしてください");
+            mav.setViewName("home");
+            return mav;
+        }
     }
 }

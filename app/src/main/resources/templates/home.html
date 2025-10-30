@@ -38,7 +38,7 @@
              🚪 <a th:href="@{/login}">ログイン</a>
         </div>
         <div sec:authorize="isAuthenticated()">
-            🏃 <a th:href="@{/logout}">ログアウト</a>
+            📝 <a th:href="@{/home}">ユーザーホーム</a>  🏃 <a th:href="@{/logout}">ログアウト</a>
         </div>
         <div class="to_todo">
             ✅ <a th:href="@{/todo}">ToDoアプリへ</a>

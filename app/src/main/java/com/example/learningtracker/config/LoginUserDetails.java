@@ -1,6 +1,5 @@
 package com.example.learningtracker.config;
 
-import java.util.Arrays;
 import java.util.Collection;
 
 import org.springframework.security.core.GrantedAuthority;
@@ -11,6 +10,8 @@ import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode
 public class LoginUserDetails implements UserDetails {
+
+    private User user;
     private final String accountId;
     private final String password;
     private final String name;
@@ -21,6 +22,11 @@ public class LoginUserDetails implements UserDetails {
         this.password = user.getPassword();
         this.name = user.getName();
         this.authorities = null;
+        this.user = user;
+    }
+
+    public User getUser() {
+        return user;
     }
 
     @Override
