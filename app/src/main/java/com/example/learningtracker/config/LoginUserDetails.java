@@ -29,6 +29,10 @@ public class LoginUserDetails implements UserDetails {
         return user;
     }
 
+    public Integer getId() {
+        return user.getId();
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         // ロールのコレクションを返す

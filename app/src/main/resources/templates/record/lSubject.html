@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+  <title>学習項目</title>
+</head>
+<body class="bg-light">
+  <div class="container">
+    <table>
+      <tr>
+        <th>id</th>
+        <th>user</th>
+        <th>name</th>
+        <th>createdAt</th>
+        <th>updatedAt</th>
+      </tr>
+      <tr th:each="subject:${subjectList}">
+        <td th:text="${subject.id}"></td>
+        <td th:text="${subject.user.name}"></td>
+        <td th:text="${subject.name}"></td>
+        <td th:text="${subject.createdAt}"></td>
+        <td th:text="${subject.updatedAt}"></td>
+      </tr>
+    </table>
+  </div>
+</body>
+</html>

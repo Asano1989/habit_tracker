@@ -9,8 +9,17 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class LearningSubjectForm {
-		@Size(max = 255, message = "項目名は255文字以内で入力してください")
-		private String name;
+    private int userId;
+
+	@Size(max = 255, message = "項目名は255文字以内で入力してください")
+	private String name;
+
+    public int getUserId() {
+        return userId;
+    }
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
 
 	public String getName() {
         return name;
