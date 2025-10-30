@@ -1,6 +1,5 @@
 package com.example.learningtracker.controller.form;
 
-
 import java.io.Serializable;
 
 import jakarta.validation.constraints.NotBlank;

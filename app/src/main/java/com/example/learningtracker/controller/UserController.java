@@ -115,7 +115,7 @@ public class UserController {
             return "user/signup";
         }
 
-        model.addAttribute("signupSuccess", signupFailed);
+        model.addAttribute("signupSuccess", "ユーザー登録が完了しました");
         return "user/login";
     }
 
