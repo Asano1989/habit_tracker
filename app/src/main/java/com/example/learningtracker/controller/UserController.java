@@ -80,6 +80,9 @@ public class UserController {
     @PostMapping("/signup")
     String signup(@Validated UserForm userForm, BindingResult result, Model model) {
 
+        String accountIdError = "ユーザー名 " + userForm.getAccountId() + "は既に登録されています";
+        String signupFailed = "ユーザー登録に失敗しました";
+
         LocalDateTime now = LocalDateTime.now();
         User user = new User();
 
@@ -89,27 +92,27 @@ public class UserController {
         user.setUpdatedAt(now);
 
         if (loginUserDetailService.isExistUser(userForm.getAccountId()) && result.hasErrors()) {
-            model.addAttribute("signupError", "ユーザー登録に失敗しました");
-            model.addAttribute("accountIdError", "ユーザー名 " + userForm.getAccountId() + "は既に登録されています");
+            model.addAttribute("signupError", signupFailed);
+            model.addAttribute("accountIdError", accountIdError);
             return "user/signup";
         } else if (loginUserDetailService.isExistUser(userForm.getAccountId())) {
             model.addAttribute("userForm", userForm);
-            model.addAttribute("signupError", "ユーザー登録に失敗しました");
-            model.addAttribute("accountIdError", "ユーザー名 " + userForm.getAccountId() + "は既に登録されています");
+            model.addAttribute("signupError", signupFailed);
+            model.addAttribute("accountIdError", accountIdError);
             return "user/signup";
         } else if (result.hasErrors()) {
-            model.addAttribute("signupError", "ユーザー登録に失敗しました");
+            model.addAttribute("signupError", signupFailed);
             return "user/signup";
         }
 
         try {
             userService.create(user, userForm.getPassword());
         } catch (DataAccessException e) {
-            model.addAttribute("signupError", "ユーザー登録に失敗しました");
+            model.addAttribute("signupError", signupFailed);
             return "user/signup";
         }
 
-        model.addAttribute("signupSuccess", "ユーザー登録が完了しました");
+        model.addAttribute("signupSuccess", signupFailed);
         return "user/login";
     }
 

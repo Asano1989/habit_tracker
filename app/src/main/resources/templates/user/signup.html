@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" th:href="@{/css/style.css}">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" th:href="@{/css/style.css}">
   <title>ユーザー登録</title>
 </head>
 <body class="bg-light">
@@ -12,12 +12,8 @@
     <div class="row justify-content-center align-items-center min-vh-100 py-5">
       <div class="col-12 col-md-7 col-lg-5 col-xl-4">
         <div class="card shadow border-0">
-          <div class="card-header text-center border-0">
-            <h1 class="mb-0">ユーザー登録</h1>
-          </div>
           <div class="card-body">
             <div th:if="${signupError}" class="alert alert-danger" role="alert" th:text="${signupError}"></div>
-            <div th:if="${accountIdError}" class="alert alert-danger" role="alert" th:text="${accountIdError}"></div>
             
             <form method="post" th:action="@{/signup}" th:object="${userForm}">
               <div class="form-group">
@@ -29,8 +25,8 @@
                   name="accountId" 
                   th:value="${userForm.accountId}"
                   th:classappend="${#fields.hasErrors('accountId')} ? 'is-invalid' : ''"
-                  placeholder="ユーザー名を入力してください"
-                  required>
+                  placeholder="ユーザー名を入力してください">
+                <div th:if="${accountIdError}" class="invalid-feedback d-block" th:text="${accountIdError}"></div>
                 <div th:if="${#fields.hasErrors('accountId')}" class="invalid-feedback d-block" th:errors="${userForm.accountId}"></div>
               </div>
               
@@ -43,8 +39,7 @@
                   name="password" 
                   th:value="${userForm.password}"
                   th:classappend="${#fields.hasErrors('password')} ? 'is-invalid' : ''"
-                  placeholder="パスワードを入力してください"
-                  required>
+                  placeholder="パスワードを入力してください">
                 <div th:if="${#fields.hasErrors('password')}" class="invalid-feedback d-block" th:errors="${userForm.password}"></div>
               </div>
               
@@ -57,8 +52,7 @@
                   name="name" 
                   th:value="${userForm.name}"
                   th:classappend="${#fields.hasErrors('name')} ? 'is-invalid' : ''"
-                  placeholder="お名前を入力してください"
-                  required>
+                  placeholder="お名前を入力してください">
                 <div th:if="${#fields.hasErrors('name')}" class="invalid-feedback d-block" th:errors="${userForm.name}"></div>
               </div>
               
