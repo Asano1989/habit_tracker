@@ -17,23 +17,23 @@ import lombok.Data;
 @Data
 @Table(name = "users")
 public class User extends BaseEntity {
-  @Id
-  @Column(name = "id")
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Integer id;
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
-  @NotBlank
-  @Column(name = "account_id")
-  private String accountId;
+    @NotBlank
+    @Column(name = "account_id")
+    private String accountId;
 
-  @NotBlank
-  @Column(name = "password")
-  private String password;
+    @NotBlank
+    @Column(name = "password")
+    private String password;
 
-  @NotBlank
-  @Column(name = "name")
-  private String name;
+    @NotBlank
+    @Column(name = "name")
+    private String name;
 
-  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-  private List<LearningSubject> learningSubject;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<LearningSubject> learningSubject;
 }

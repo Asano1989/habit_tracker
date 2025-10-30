@@ -12,7 +12,7 @@ import lombok.Data;
 @Data
 public class UserForm implements Serializable {
     @NotBlank(message = "アカウント名を入力してください")
-    @Size(max = 100, message = "アカウント名は100文字以内で入力してください")
+    @Size(min = 5, max = 50, message = "アカウント名は5文字以上、50文字以内で入力してください")
     @Pattern(regexp = "^[ -~]+$", message = "アカウント名は半角英数字と記号で入力してください")
     private String accountId;
 
@@ -21,8 +21,8 @@ public class UserForm implements Serializable {
     private String password;
 
     @NotBlank(message = "名前を入力してください")
-    @Size(max = 100, message = "名前は100文字以内で入力してください")
-    @Pattern(regexp="[^\\s|　]+", message="名前に空白文字を含めることはできません")
+    @Size(min = 1, max = 50, message = "名前は50文字以内で入力してください")
+    @Pattern(regexp="[a-zA-Z0-9亜-熙ぁ-んァ-ヶ]+", message="名前はひらがな、カタカナ、漢字、半角英数字で入力してください")
     private String name;
 
     /* 
