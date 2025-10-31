@@ -31,8 +31,8 @@
           <td th:text="${subject.user.name}"></td>
           <td th:text="${subject.name}"></td>
           <td th:text="${subject.description}"></td>
-          <td th:text="${subject.createdAt}"></td>
-          <td th:text="${subject.updatedAt}"></td>
+          <td th:text="${#temporals.format(subject.createdAt, 'yyyy/MM/dd HH:mm:ss')}"></td>
+          <td th:text="${#temporals.format(subject.updatedAt, 'yyyy/MM/dd HH:mm:ss')}"></td>
           <td>
             <form th:action="@{/subject/__${subject.id}__}" method="post">
               <button type="submit">編集</button>

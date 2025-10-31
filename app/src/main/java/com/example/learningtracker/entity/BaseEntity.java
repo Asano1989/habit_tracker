@@ -19,11 +19,11 @@ public abstract class BaseEntity {
 
     @CreatedDate
     @Column(nullable = false, updatable = false) // 作成後は更新されない
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern = "yyyy/MM/dd HH:mm:ss")
     private LocalDateTime createdAt;
 
     @LastModifiedDate
     @Column(nullable = false)
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern = "yyyy/MM/dd HH:mm:ss")
     private LocalDateTime updatedAt;
 }
