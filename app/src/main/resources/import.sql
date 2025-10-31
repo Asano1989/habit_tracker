@@ -1,8 +1,8 @@
 INSERT INTO users(id, account_id, password, name, created_at, updated_at) VALUES (1, 'admin', '$2a$10$3Ig0SBonbQXik.IUrxNMh.2By/JmZiQvNhvO/.aFCrjv4Ad3Omp8m', 'admin', NOW(), NOW());
 INSERT INTO users(id, account_id, password, name, created_at, updated_at) VALUES (2, 'asano69a', '$2a$10$m9FxtHPwoZFDyCyNPjJd4OpoBHFavlbhWhB/fDTT5UI3Rvde2ocnK', 'あさの', NOW(), NOW());
-INSERT INTO learning_subjects(id, user_id, name, created_at, updated_at) VALUES (1, 2, 'test_subject01', NOW(), NOW());
-INSERT INTO learning_subjects(id, user_id, name, created_at, updated_at) VALUES (2, 2, 'test_subject02', NOW(), NOW());
-INSERT INTO learning_subjects(id, user_id, name, created_at, updated_at) VALUES (3, 1, 'test_subject03', NOW(), NOW());
+INSERT INTO learning_subjects(id, user_id, name, description, created_at, updated_at) VALUES (1, 2, 'test_subject01', 'testTESTテストてすとtestTESTテストてすとtestTESTテストてすとtestTESTテストてすとtestTESTテストてすとtestTESTテストてすとtestTESTテストてすとtestTESTテストてすと', NOW(), NOW());
+INSERT INTO learning_subjects(id, user_id, name, description, created_at, updated_at) VALUES (2, 2, 'test_subject02', 'testTESTテストてすとtestTESTテストてすとtestTESTテストてすとtestTESTテストてすとtestTESTテストてすとtestTESTテストてすとtestTESTテストてすとtestTESTテストてすと', NOW(), NOW());
+INSERT INTO learning_subjects(id, user_id, name, description, created_at, updated_at) VALUES (3, 1, 'test_subject03', 'testTESTテストてすとtestTESTテストてすとtestTESTテストてすとtestTESTテストてすとtestTESTテストてすとtestTESTテストてすとtestTESTテストてすとtestTESTテストてすと', NOW(), NOW());
 INSERT INTO todo(title,importance,urgency,deadline,done) VALUES('todo-1',0,0,'2020-10-01','N');
 INSERT INTO todo(title,importance,urgency,deadline,done) VALUES('todo-2',0,1,'2020-10-02','Y');
 INSERT INTO todo(title,importance,urgency,deadline,done) VALUES('todo-3',1,0,'2020-10-03','N');

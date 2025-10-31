@@ -9,7 +9,8 @@ DROP TABLE IF EXISTS learning_subjects;
 CREATE TABLE learning_subjects (
     id              SERIAL          PRIMARY KEY,
     user_id         VARCHAR(100)    NOT NULL,
-    name            VARCHAR(500)    UNIQUE NOT NULL
+    name            VARCHAR(500)    UNIQUE NOT NULL,
+    description     TEXT
 );
 DROP TABLE IF EXISTS todo;
 CREATE TABLE todo (
