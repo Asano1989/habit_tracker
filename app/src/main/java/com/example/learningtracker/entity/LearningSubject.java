@@ -9,28 +9,30 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 @Table(name = "learning_subjects")
 public class LearningSubject extends BaseEntity {
-	@Id
+		@Id
     @Column(name = "id")
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Integer id;
 
-    @NotBlank
+    @NotNull
     @Column(name = "user_id")
     private Integer userId;
 
-	@NotBlank
+		@NotBlank
     @Column(name = "name")
     private String name;
+
+		@Column(name = "description")
+		private String description;
 
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id", insertable = false, updatable = false, nullable = false)
@@ -38,25 +40,41 @@ public class LearningSubject extends BaseEntity {
 
     public Integer getId() {
 		return id;
-	}
+		}
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
+		public void setId(Integer id) {
+			this.id = id;
+		}
 
-	public String getName() {
-		return name;
-	}
+		public Integer getUserId() {
+		return userId;
+		}
 
-	public void setName(String name) {
-		this.name = name;
-	}
+		public void setUserId(Integer userId) {
+			this.userId = userId;
+		}
 
-	public User getUser() {
-		return user;
-	}
+		public String getName() {
+			return name;
+		}
 
-	public void setUser(User user) {
-		this.user = user;
-	}
+		public void setName(String name) {
+			this.name = name;
+		}
+
+		public String getDescription() {
+			return description;
+		}
+
+		public void setDescription(String description) {
+			this.description = description;
+		}
+
+		public User getUser() {
+			return user;
+		}
+
+		public void setUser(User user) {
+			this.user = user;
+		}
 }

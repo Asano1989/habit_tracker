@@ -1,5 +1,6 @@
 package com.example.learningtracker.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,12 +17,37 @@ public class LearningSubjectService {
 
 		@Autowired
 		private LearningSubjectRepository learningSubjectRepository;
-		
-		public void setLearningSubject(LearningSubjectForm form, @AuthenticationPrincipal LoginUserDetails loginUser) {
+
+		public void setLSubject(LearningSubjectForm form, @AuthenticationPrincipal LoginUserDetails loginUser) {
+				LocalDateTime now = LocalDateTime.now();
 				LearningSubject subject = new LearningSubject();
-				subject.setUserId(loginUser.getUser().getId());
-				subject.setName(form.getName());
-				learningSubjectRepository.save(subject);
+
+				if (loginUser.getUser().getId() == form.getUserId()) {
+						subject.setId(form.getId());
+						subject.setName(form.getName());
+						subject.setUser(loginUser.getUser());
+						subject.setUserId(form.getUserId());
+						subject.setDescription(form.getDescription());
+						subject.setCreatedAt(now);
+						subject.setUpdatedAt(now);
+						
+						learningSubjectRepository.save(subject);
+				}
+		}
+
+		public void update(LearningSubjectForm form, @AuthenticationPrincipal LoginUserDetails loginUser) {
+				LearningSubject subject = new LearningSubject();
+
+				if (loginUser.getUser().getId() == form.getUserId()) {
+						subject.setId(form.getId());
+						subject.setName(form.getName());
+						subject.setUser(loginUser.getUser());
+						subject.setUserId(form.getUserId());
+						subject.setDescription(form.getDescription());
+						subject.setUpdatedAt(LocalDateTime.now());
+						
+						learningSubjectRepository.save(subject);
+				}
 		}
 		
 		public List<LearningSubject> findAllLSubjects(){
@@ -29,6 +55,6 @@ public class LearningSubjectService {
 		}
 
 		public List<LearningSubject> findAllByUserId(@AuthenticationPrincipal LoginUserDetails loginUser){
-			return learningSubjectRepository.findByUserId(loginUser.getId());
+			return learningSubjectRepository.findByUserIdOrderByIdAsc(loginUser.getId());
 		}
 }

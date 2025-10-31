@@ -8,4 +8,5 @@ import com.example.learningtracker.entity.LearningSubject;
 
 public interface LearningSubjectRepository extends JpaRepository<LearningSubject, Integer> {
     List<LearningSubject> findByUserId(Integer user_id);
+    List<LearningSubject> findByUserIdOrderByIdAsc(Integer user_id);
 }
