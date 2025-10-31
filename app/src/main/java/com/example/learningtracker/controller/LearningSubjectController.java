@@ -78,7 +78,6 @@ public class LearningSubjectController {
             learningSubjectForm.setUserId(loginUserDetails.getUser().getId());
             model.addAttribute("learningSubjectForm", learningSubjectForm);
 
-            // 更新する
             learningSubjectService.setLSubject(learningSubjectForm, loginUserDetails);
             return "redirect:/subject";
         }
@@ -98,7 +97,6 @@ public class LearningSubjectController {
             learningSubjectForm.setUserId(loginUserDetails.getUser().getId());
             model.addAttribute("learningSubjectForm", learningSubjectForm);
 
-            // 更新する
             learningSubjectService.update(learningSubjectForm, loginUserDetails);
             return "redirect:/subject";
         }
