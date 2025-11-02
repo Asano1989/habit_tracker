@@ -1,6 +1,7 @@
 package com.example.learningtracker.controller;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -21,7 +22,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.learningtracker.controller.form.UserForm;
 import com.example.learningtracker.entity.User;
+import com.example.learningtracker.entity.Record;
 import com.example.learningtracker.repository.UserRepository;
+import com.example.learningtracker.service.RecordService;
 import com.example.learningtracker.service.UserService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -42,7 +45,7 @@ public class UserController {
     private UserService userService;
 
     @Autowired
-    private UserRepository userRepository;
+    private RecordService recordService;
 
     @ModelAttribute
     public UserForm userForm() {
@@ -133,9 +136,12 @@ public class UserController {
     }
 
     @GetMapping("/home")
-    public ModelAndView home(Model model, ModelAndView mav) {
+    public ModelAndView home(@AuthenticationPrincipal LoginUserDetails loginUser, Model model, ModelAndView mav) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.isAuthenticated() && !(authentication.getPrincipal() instanceof String)) {
+            List<Record> recordList = recordService.findAllRecordsByUser(loginUser);
+            model.addAttribute("recordList", recordList);
+
             mav.addObject("message", "ようこそ、" + authentication.getName() + "さん！");
             mav.setViewName("user/userHome");
             return mav;

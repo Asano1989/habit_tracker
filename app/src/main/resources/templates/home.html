@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <title>Spring Bootアプリケーション</title>
+  <title>学習時間記録アプリ</title>
   <style>
     body {
         font-family: Arial, sans-serif;
@@ -40,42 +40,6 @@
     <div sec:authorize="isAuthenticated()">
       🏡 <a th:href="@{/home}">ユーザーホーム</a>  🏃 <a th:href="@{/logout}">ログアウト</a>
     </div>
-  </div>
-  <div th:if="${recordList}" class="container center">
-    <table class="table table-striped m-5">
-      <tr>
-        <th>id</th>
-        <th>名前</th>
-        <th>学習項目</th>
-        <th>date</th>
-        <th>start</th>
-        <th>stop</th>
-        <th>sum</th>
-        <th>pomo</th>
-        <th>use</th>
-        <th>memo</th>
-        <th>break</th>
-        <th>公開</th>
-        <th>createdAt</th>
-        <th>updatedAt</th>
-      </tr>
-      <tr th:each="record:${recordList}">
-        <td th:text="${record.id}"></td>
-        <td th:text="${record.learningSubject.user.name}"></td>
-        <td th:text="${record.learningSubject.name}"></td>
-        <td th:text="${#temporals.format(record.date, 'yyyy/MM/dd')}"></td>
-        <td th:text="${#temporals.format(record.startTime, 'HH:mm')}"></td>
-        <td th:text="${#temporals.format(record.stopTime, 'HH:mm')}"></td>
-        <td th:text="${#temporals.format(record.sumTime, 'HH:mm')}"></td>
-        <td th:text="${record.pomodoro}"></td>
-        <td th:text="${record.usesPomodoro== true ? '●':'○'}"></td>
-        <td th:text="${record.memo}"></td>
-        <td th:text="${#temporals.format(record.breakTime, 'HH:mm')}"></td>
-        <td th:text="${record.isPublished== true ? '公開':'非公開'}"></td>
-        <td th:text="${#temporals.format(record.createdAt, 'yyyy/MM/dd HH:mm:ss')}"></td>
-        <td th:text="${#temporals.format(record.updatedAt, 'yyyy/MM/dd HH:mm:ss')}"></td>
-      </tr>
-    </table>
   </div>
 </body>
 </html>
