@@ -22,6 +22,11 @@
   </div>
 
   <div class="container">
+    <div class="create">
+      <form th:action="@{/record/create/form}" method="post">
+        <button type="submit" class="btn btn-primary active">新規追加</button>
+      </form>
+    </div>
     <div class="table center p-5">
       <table>
         <tr>

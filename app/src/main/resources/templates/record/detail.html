@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+  <title>学習記録</title>
+</head>
+<body class="bg-light">
+  <div class="container center">
+    <p><span th:text="${record.learningSubject.user.name}"></span>さんの学習記録</p>
+    <div class="table center m-5">
+      <table th:object="${record}">
+        <tr>
+          <th>id</th>
+          <td th:text="${record.id}"></td>
+        </tr>
+        <tr>
+          <th>名前</th>
+          <td th:text="${record.learningSubject.user.name}"></td>
+        </tr>
+        <tr>
+          <th>学習項目</th>
+          <td th:text="${record.learningSubject.name}"></td>
+        </tr>
+        <tr>
+          <th>日付</th>
+          <td th:text="${#temporals.format(record.date, 'yyyy/MM/dd')}"></td>
+        </tr>
+        <tr>
+          <th>開始時間</th>
+          <td th:text="${#temporals.format(record.startTime, 'HH:mm')}"></td>
+        </tr>
+        <tr>
+          <th>終了時間</th>
+          <td th:text="${#temporals.format(record.stopTime, 'HH:mm')}"></td>
+        </tr>
+        <tr>
+          <th>休憩時間</th>
+          <td th:text="${#temporals.format(record.breakTime, 'HH:mm')}"></td>
+        </tr>
+        <tr>
+          <th>学習時間（合計）</th>
+          <td th:text="${#temporals.format(record.sumTime, 'HH:mm')}"></td>
+        </tr>
+        <tr th:if="${record.usesPomodoro}">
+          <th>ポモドーロ数</th>
+          <td th:text="${record.pomodoro}"></td>
+        </tr>
+        <tr>
+          <th>ポモドーロに換算する</th>
+          <td th:text="${record.usesPomodoro== true ? 'する':'しない'}"></td>
+        </tr>
+        <tr>
+          <th>メモ</th>
+          <td th:text="${record.memo}"></td>
+        </tr>
+        <tr>
+          <th>公開する</th>
+          <td th:text="${record.isPublished== true ? '公開':'非公開'}"></td>
+        </tr>
+        <tr>
+          <th>createdAt</th>
+          <td th:text="${#temporals.format(record.createdAt, 'yyyy/MM/dd HH:mm:ss')}"></td>
+        </tr>
+        <tr>
+          <th>updatedAt</th>
+          <td th:text="${#temporals.format(record.updatedAt, 'yyyy/MM/dd HH:mm:ss')}"></td>
+        </tr>
+        <tr>
+          <th></th>
+          <td>
+            <form th:action="@{/record/__${record.id}__/edit}" method="post">
+              <button type="submit" class="btn btn-primary active">編集</button>
+            </form>
+          </td>
+        </tr>
+      </table>
+          <!-- <form th:action="@{/record/__${record.id}__/delete}" method="post">
+              <button type="submit">削除</button>
+            </form> -->
+      
+    </div>
+  </div>
+</body>
+</html>
