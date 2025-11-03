@@ -20,15 +20,12 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.example.learningtracker.config.LoginUserDetailService;
 import com.example.learningtracker.config.LoginUserDetails;
-import com.example.learningtracker.controller.form.LearningSubjectForm;
 import com.example.learningtracker.controller.form.RecordForm;
-import com.example.learningtracker.entity.LearningSubject;
 import com.example.learningtracker.entity.Record;
 import com.example.learningtracker.entity.User;
 import com.example.learningtracker.repository.RecordRepository;
 import com.example.learningtracker.service.LearningSubjectService;
 import com.example.learningtracker.service.RecordService;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 @Controller
