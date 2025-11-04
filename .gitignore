@@ -85,3 +85,8 @@ postgres_data_dev/
 *.env.prod
 
 .m2/
+
+# ==============================
+# いらない機能
+# ==============================
+app/src/main/java/com/example/learningtracker/todolist
