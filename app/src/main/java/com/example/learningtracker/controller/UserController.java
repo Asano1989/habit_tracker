@@ -52,12 +52,13 @@ public class UserController {
         return new UserForm();
     }
 
-    @GetMapping("/login")
+    @PostMapping("/login")
     public String login(Model model, HttpServletRequest req) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.isAuthenticated() && !(authentication.getPrincipal() instanceof String)) {
             model.addAttribute("message", "ログインしています");
-            return "home";
+            model.addAttribute("loggedin", true);
+            return "user/userHome";
         } else {
             HttpSession session = req.getSession(false);
             if (session != null) {
@@ -68,7 +69,7 @@ public class UserController {
                     System.out.println(redirectUrl);
                 }
             }
-            return "user/login";
+            return "home";
         }
     }
 
@@ -119,7 +120,7 @@ public class UserController {
         }
 
         model.addAttribute("signupSuccess", "ユーザー登録が完了しました");
-        return "user/login";
+        return "home";
     }
 
     @GetMapping("/logout")

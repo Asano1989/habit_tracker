@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class PomodoroService {
 
-    // ポモドーロ1セットの時間（分）。ここでは25分としています。
+    // ポモドーロ1セットの時間（分）
     private static final int POMODORO_UNIT_MINUTES = 25;
     
     // API応答に使用する共通のDTO
@@ -23,7 +23,7 @@ public class PomodoroService {
     }
 
     /**
-     * 学習時間（分）からポモドーロ数を算出します。
+     * 学習時間（分）からポモドーロ数を算出
      * @param pureStudyMinutes 純学習時間（分）
      * @return 計算結果（ポモドーロ数を含む）
      */
@@ -39,7 +39,7 @@ public class PomodoroService {
     }
 
     /**
-     * ポモドーロ数から学習時間（分）を算出します。
+     * ポモドーロ数から学習時間（分）を算出
      * @param pomodoroCount ポモドーロ数
      * @return 計算結果（学習時間（分）を含む）
      */

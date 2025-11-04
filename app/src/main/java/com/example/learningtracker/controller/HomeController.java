@@ -14,17 +14,18 @@ import org.springframework.security.core.context.SecurityContextHolder;
 public class HomeController {
 
     @GetMapping("/")
-    public ModelAndView home(Model model, @ModelAttribute("message") String message, ModelAndView mav) {
+    public ModelAndView home(Model model, @ModelAttribute("message") String message, ModelAndView mv) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.isAuthenticated() && !(authentication.getPrincipal() instanceof String)) {
-            mav.addObject("message", "ログインしています");
+            mv.addObject("message", "ログインしています");
+            mv.addObject("loggedin", true);
 
-            mav.setViewName("home");
-            return mav;
+            mv.setViewName("home");
+            return mv;
         } else {
-            model.addAttribute("message", message);
-            mav.setViewName("home");
-            return mav;
+            mv.addObject("message", message);
+            mv.setViewName("home");
+            return mv;
         }
     }
 

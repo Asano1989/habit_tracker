@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" th:href="@{/css/style.css}">
   <title>学習時間記録アプリ</title>
   <style>
     body {
@@ -35,10 +36,62 @@
     <h1>📝 学習時間記録アプリ</h1>
     <p th:text="${message}"></p>
     <div sec:authorize="isAnonymous()">
-      ✏ <a th:href="@{/signup}">新規登録</a>  🚪 <a th:href="@{/login}">ログイン</a>
+      ✏ <a th:href="@{/signup}">新規登録</a>
     </div>
     <div sec:authorize="isAuthenticated()">
       🏡 <a th:href="@{/home}">ユーザーホーム</a>  🏃 <a th:href="@{/logout}">ログアウト</a>
+    </div>
+  </div>
+
+  <div th:unless="${loggedin}" class="container">
+    <div class="row justify-content-center align-items-center min-vh-100 py-5">
+      <div class="col-12 col-md-7 col-lg-5 col-xl-4">
+        <div class="card shadow border-0">
+          
+          <div class="card-body">
+            <!-- Success message for signup -->
+            <div th:if="${signupSuccess}" class="alert alert-success" role="alert" th:text="${signupSuccess}"></div>
+            
+            <!-- Error messages with Bootstrap alert styling -->
+            <div th:if="${param.error}" class="alert alert-danger" role="alert">
+              ログインに失敗しました
+              <div th:if="${session[SPRING_SECURITY_LAST_EXCEPTION] != null}">
+                <span th:text="${session[SPRING_SECURITY_LAST_EXCEPTION].message}"></span>
+              </div>
+            </div>
+            
+            <div th:if="${param.logout}" class="alert alert-info" role="alert">
+              ログアウトしました
+            </div>
+            
+            <form method="post" th:action="@{/login}">
+              <div class="form-group">
+                <label for="accountId">ユーザー名</label>
+                <input 
+                  type="text" 
+                  class="form-control" 
+                  id="accountId" 
+                  name="accountId"
+                  placeholder="ユーザー名を入力してください"
+                  required>
+              </div>
+              
+              <div class="form-group">
+                <label for="password">パスワード</label>
+                <input 
+                  type="password" 
+                  class="form-control" 
+                  id="password" 
+                  name="password"
+                  placeholder="パスワードを入力してください"
+                  required>
+              </div>
+              
+              <button type="submit" class="btn btn-gradient btn-lg btn-block">ログイン</button>
+            </form>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </body>

@@ -29,7 +29,7 @@ public class SecurityConfig {
             .usernameParameter("accountId")
             .passwordParameter("password")
             .loginProcessingUrl("/login")
-            .loginPage("/login")
+            .loginPage("/")
             .permitAll()
         )
         .logout(logout -> logout
