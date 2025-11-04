@@ -119,6 +119,14 @@ public class UserController {
             return "user/signup";
         }
 
+        // パスワード確認用フィールドとの一致をここでチェック
+        if (!userForm.getPassword().equals(userForm.getPasswordConfirmation())) {
+            // FieldErrorを手動で追加
+            result.rejectValue("passwordConfirmation", "error.passwordConfirmation", "パスワードが一致しません");
+            model.addAttribute("signupError", signupFailed);
+            return "user/signup";
+        }
+
         try {
             userService.create(user, userForm.getPassword());
         } catch (DataAccessException e) {
