@@ -55,6 +55,7 @@ public class RecordService {
             record.setStopTime(form.getStopTime());
             record.setBreakTime(form.getBreakTime());
             record.setSumTime(form.getSumTime());
+            record.setPomodoro(form.getPomodoro());
             record.setUsesPomodoro(form.getUsesPomodoro());
             record.setMemo(form.getMemo());
             record.setIsPublished(form.getIsPublished());

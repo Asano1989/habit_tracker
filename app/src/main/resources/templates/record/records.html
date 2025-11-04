@@ -19,23 +19,23 @@
       <table>
         <tr>
           <th>id</th>
-          <th>学習項目</th>
           <th>date</th>
-          <th>start</th>
+          <th>学習項目</th>
+          <!-- <th>start</th>
           <th>stop</th>
-          <th>break</th>
-          <th>sum</th>
-          <th>pomo</th>
+          <th>break</th> -->
+          <th>学習時間（分）</th>
+          <th>ポモドーロ数</th>
           <th>memo</th>
           <th>公開</th>
         </tr>
         <tr th:each="record:${recordList}">
           <td><a th:href="@{/record/__${record.id}__}" th:text="${record.id}"></a></td>
-          <td th:text="${record.learningSubject.name}"></td>
           <td th:text="${#temporals.format(record.date, 'yyyy/MM/dd')}"></td>
-          <td th:text="${#temporals.format(record.startTime, 'HH:mm')}"></td>
+          <td th:text="${record.learningSubject.name}"></td>
+          <!-- <td th:text="${#temporals.format(record.startTime, 'HH:mm')}"></td>
           <td th:text="${#temporals.format(record.stopTime, 'HH:mm')}"></td>
-          <td th:text="${#temporals.format(record.breakTime, 'HH:mm')}"></td>
+          <td th:text="${#temporals.format(record.breakTime, 'HH:mm')}"></td> -->
           <td th:text="${#temporals.format(record.sumTime, 'HH:mm')}"></td>
           <td><span th:text="${record.usesPomodoro== true ? __${record.pomodoro}__ :'－'}"></span></td>
           <td th:text="${record.memo}"></td>

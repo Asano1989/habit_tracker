@@ -1,52 +1,52 @@
 package com.example.learningtracker.controller;
 
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import com.example.learningtracker.service.PomodoroService;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.learningtracker.service.PomodoroService;
+import com.example.learningtracker.service.PomodoroService.CalculationResult;
 
 @RestController
-@RequestMapping("/api/calculator") // より汎用的なパスに変更することを推奨
+@RequestMapping("/api/calculator")
 public class PomodoroApiController {
 
-    @Autowired
-    private PomodoroService pomodoroService;
+    private final PomodoroService pomodoroService;
 
-    // 複数の計算パターンに対応できるよう、計算に必要な全データを受け取る
-    @GetMapping("/calculate")
-    public Map<String, Long> calculate(
-            @RequestParam(required = false) String startTime,
-            @RequestParam(required = false) String stopTime,
-            @RequestParam(required = false) String breakTime,
-            @RequestParam(required = false) Long pureStudyMinutes, // 純学習時間（分）
-            @RequestParam(required = false) Integer pomodoroCount) { // ポモドーロ数
+    // コンストラクタインジェクション
+    public PomodoroApiController(PomodoroService pomodoroService) {
+        this.pomodoroService = pomodoroService;
+    }
 
-        // サービス層に処理を委譲し、どの値が変更されたかに応じた結果を取得する
-        // 戻り値は { "pureStudyMinutes": 120, "pomodoroCount": 4 } のような形式とする
+    // --- エンドポイント 1: 学習時間からポモドーロ数を計算 ---
+    /**
+     * URL: /api/calculator/time-to-pomodoro?pureStudyMinutes={分}
+     */
+    @GetMapping("/time-to-pomodoro")
+    public CalculationResult calculatePomodoroFromTime(@RequestParam("pureStudyMinutes") Integer pureStudyMinutes) {
+        // nullや不正な値が渡された場合のバリデーション
+        if (pureStudyMinutes == null || pureStudyMinutes <= 0) {
+            // 例外をスローせず、計算サービスに任せるか、最小の結果を返す
+            return new CalculationResult(0, 0); 
+        }
 
-        if (pomodoroCount != null) {
-            // 要件3: ポモドーロ数から学習時間を算出
-            long minutes = pomodoroService.calculateMinutesFromPomodoro(pomodoroCount);
-            return Map.of("pureStudyMinutes", minutes, "pomodoroCount", (long)pomodoroCount);
+        // Serviceに計算を依頼
+        return pomodoroService.calculatePomodoroFromTime(pureStudyMinutes);
+    }
 
-        } else if (startTime != null && stopTime != null) {
-            // 要件1: Start/Stop/Breakから学習時間とポモドーロ数を算出
-            return pomodoroService.calculateFromTimes(startTime, stopTime, breakTime);
+    // --- エンドポイント 2: ポモドーロ数から学習時間（分）を計算 ---
+    /**
+     * URL: /api/calculator/pomodoro-to-time?pomodoroCount={ポモドーロ数}
+     */
+    @GetMapping("/pomodoro-to-time")
+    public CalculationResult calculateTimeFromPomodoro(@RequestParam("pomodoroCount") Integer pomodoroCount) {
+        // nullや不正な値が渡された場合のバリデーション
+        if (pomodoroCount == null || pomodoroCount <= 0) {
+            return new CalculationResult(0, 0);
+        }
 
-        } else if (pureStudyMinutes != null) {
-            // 要件2: 学習時間のみからポモドーロ数を算出
-            int count = pomodoroService.calculatePomodoroFromMinutes(pureStudyMinutes);
-            return Map.of("pureStudyMinutes", pureStudyMinutes, "pomodoroCount", (long)count);
-            
-        } 
-        
-        // いずれのパターンにも当てはまらない場合は空の結果を返す
-        return Map.of();
+        // Serviceに計算を依頼
+        return pomodoroService.calculateTimeFromPomodoro(pomodoroCount);
     }
 }

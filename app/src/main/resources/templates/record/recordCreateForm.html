@@ -44,7 +44,7 @@
             <input type="date" id="date" name="date" th:value="${#temporals.format(today, 'yyyy-MM-dd')}">
           </td>
         </tr>
-        <tr>
+        <!-- <tr>
           <th>開始時間</th>
           <td>
               <input type="time" th:field="*{startTime}" id="startTime" class="time-input-group">
@@ -62,7 +62,7 @@
             <input type="time" id="breakTime" name="breakTime" value="00:00" class="time-input-group">
           </td>
         </tr>
-        <tr>
+        <tr> -->
           <th>学習時間（分）</th>
           <td>
             <input type="time" id="sumTime" name="sumTime" value="00:00" class="manual-input-group">
@@ -78,7 +78,14 @@
         <tr>
           <th>ポモドーロ数</th>
           <td>
-            <input type="number" id="pomodoroInput" placeholder="ポモドーロ数" th:field="*{pomodoro}" class="manual-input-group" min="1" step="1" oninput="this.value = this.value.replace(/[^0-9\d]|^0+/g, '');">
+            <input type="number" 
+              id="pomodoro" 
+              placeholder="ポモドーロ数" 
+              th:field="*{pomodoro}" 
+              class="manual-input-group" 
+              min="1" 
+              step="1"
+              oninput="this.value = this.value.replace(/[^1-9\d]/g, '');">
             <span id="pomodoroToTimeNotice"></span>
           </td>
         </tr>
@@ -97,7 +104,7 @@
         </tr>
       </table>
       <div class="button">
-        <button type="button" id="resetButton" class="btn btn-warning">リセット</button>
+        <button type="button" id="resetButton" class="btn btn-warning">学習時間をリセット</button>
         <button type="submit" th:formaction="@{/record/create/do}" class="btn btn-primary active">登録</button>
       </div>
     </form>

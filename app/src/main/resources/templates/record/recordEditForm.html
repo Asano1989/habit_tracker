@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th ="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org">
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -43,7 +43,7 @@
             <input type="date" id="date" name="date" th:value="*{date}">
           </td>
         </tr>
-        <tr>
+        <!-- <tr>
           <th>開始時間</th>
           <td>
             <input type="time" th:field="*{startTime}" th:value="*{startTime}">
@@ -60,23 +60,33 @@
           <td>
             <input type="time" th:field="*{breakTime}" th:value="*{breakTime}">
           </td>
-        </tr>
+        </tr> -->
         <tr>
           <th>学習時間</th>
           <td>
-            <input type="time" th:field="*{sumTime}" th:value="*{sumTime}">
+            <input type="time" th:field="*{sumTime}" class="manual-input-group">
+            <span id="timeToPomodoroNotice"></span>
           </td>
         </tr>
         <tr>
           <th>ポモドーロに換算</th>
           <td>
-            <input type="checkbox" th:field="*{usesPomodoro}">
+            <input type="checkbox" th:field="*{usesPomodoro}" id="usesPomodoro">
           </td>
         </tr>
         <tr>
           <th>ポモドーロ数</th>
           <td>
-            
+            <input type="number" 
+              id="pomodoro" 
+              placeholder="ポモドーロ数" 
+              th:field="*{pomodoro}" 
+              class="manual-input-group" 
+              min="1" 
+              step="1"
+              th:value="*{pomodoro}"
+              oninput="this.value = this.value.replace(/[^1-9\d]/g, '');">
+            <span id="pomodoroToTimeNotice"></span>
           </td>
         </tr>
         <tr>
@@ -94,9 +104,10 @@
         </tr>
       </table>
       <div class="button">
+        <button type="button" id="resetButton" class="btn btn-warning">学習時間をリセット</button>
         <button type="submit" th:formaction="@{/record/__${record.id}__/update}" class="btn btn-primary active">更新</button>
         <button type="submit" th:formaction="@{/record/__${record.id}__/delete}" class="btn btn-danger active">削除</button>
       </div>
-    </form>
+    <script th:src="@{/js/record-calculator.js}"></script>
   </body>
 </html>

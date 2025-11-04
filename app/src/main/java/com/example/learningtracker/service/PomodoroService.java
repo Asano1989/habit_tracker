@@ -1,56 +1,56 @@
 package com.example.learningtracker.service;
 
-import java.time.Duration;
-import java.time.LocalTime;
-import java.util.Map;
-
 import org.springframework.stereotype.Service;
 
 @Service
 public class PomodoroService {
+
+    // ポモドーロ1セットの時間（分）。ここでは25分としています。
     private static final int POMODORO_UNIT_MINUTES = 25;
-
-    // A. 純学習時間からポモドーロ数を計算する汎用メソッド
-    public int calculatePomodoroFromMinutes(long pureStudyMinutes) {
-        if (pureStudyMinutes <= 0) return 0;
-        return (int) (pureStudyMinutes / POMODORO_UNIT_MINUTES);
-    }
     
-    // B. Start, Stop, Break から計算
-    public Map<String, Long> calculateFromTimes(String startTimeStr, String stopTimeStr, String breakTimeStr) {
-        // 1. "HH:mm" 形式を LocalTime オブジェクトに変換
-        LocalTime startTime = LocalTime.parse(startTimeStr);
-        LocalTime stopTime = LocalTime.parse(stopTimeStr);
-        LocalTime breakTime = LocalTime.parse(breakTimeStr);
+    // API応答に使用する共通のDTO
+    public static class CalculationResult {
+        private final Integer pureStudyMinutes;
+        private final Integer pomodoro;
 
-        // 2. 総学習時間（分）を計算
-        Duration totalDuration = Duration.between(startTime, stopTime);
-
-        // stopTime < startTime の場合（日を跨ぐ場合）
-        if (totalDuration.isNegative()) {
-            totalDuration = totalDuration.plusDays(1);
+        public CalculationResult(Integer pureStudyMinutes, Integer pomodoro) {
+            this.pureStudyMinutes = pureStudyMinutes;
+            this.pomodoro = pomodoro;
         }
 
-        // 3. 休憩時間（分）を計算：HoursとMinutesに分けて分に変換
-        long breakMinutes = breakTime.getHour() * 60L + breakTime.getMinute();
-
-        // 4. 純粋な学習時間（分）を計算
-        // 総学習時間（分）
-        long totalStudyMinutes = totalDuration.toMinutes();
-        long pureStudyMinutes = totalStudyMinutes - breakMinutes;
-
-        // 5. ポモドーロ数を計算 (切り捨て)
-        int pomodoroCount = calculatePomodoroFromMinutes(pureStudyMinutes);
-
-        return Map.of(
-            "pureStudyMinutes", pureStudyMinutes,
-            "pomodoroCount", (long)pomodoroCount
-        );
+        public Integer getPureStudyMinutes() { return pureStudyMinutes; }
+        public Integer getPomodoro() { return pomodoro; }
     }
 
-    // C. ポモドーロ数から学習時間（分）を逆算
-    public long calculateMinutesFromPomodoro(int pomodoroCount) {
-        return (long) pomodoroCount * POMODORO_UNIT_MINUTES;
+    /**
+     * 学習時間（分）からポモドーロ数を算出します。
+     * @param pureStudyMinutes 純学習時間（分）
+     * @return 計算結果（ポモドーロ数を含む）
+     */
+    public CalculationResult calculatePomodoroFromTime(Integer pureStudyMinutes) {
+        if (pureStudyMinutes == null || pureStudyMinutes <= 0) {
+            return new CalculationResult(0, 0);
+        }
+        
+        // 学習時間25分を1ポモドーロとして計算（切り捨て）
+        int pomodoroCount = pureStudyMinutes / POMODORO_UNIT_MINUTES;
+        
+        return new CalculationResult(pureStudyMinutes, pomodoroCount);
+    }
+
+    /**
+     * ポモドーロ数から学習時間（分）を算出します。
+     * @param pomodoroCount ポモドーロ数
+     * @return 計算結果（学習時間（分）を含む）
+     */
+    public CalculationResult calculateTimeFromPomodoro(Integer pomodoroCount) {
+        if (pomodoroCount == null || pomodoroCount <= 0) {
+            return new CalculationResult(0, 0);
+        }
+        
+        // ポモドーロ数 * 25分 で純学習時間（分）を算出
+        int pureStudyMinutes = pomodoroCount * POMODORO_UNIT_MINUTES;
+        
+        return new CalculationResult(pureStudyMinutes, pomodoroCount);
     }
 }
-

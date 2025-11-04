@@ -21,14 +21,14 @@
           <td th:text="${record.learningSubject.user.name}"></td>
         </tr>
         <tr>
-          <th>学習項目</th>
-          <td th:text="${record.learningSubject.name}"></td>
-        </tr>
-        <tr>
           <th>日付</th>
           <td th:text="${#temporals.format(record.date, 'yyyy/MM/dd')}"></td>
         </tr>
-        <tr>
+                <tr>
+          <th>学習項目</th>
+          <td th:text="${record.learningSubject.name}"></td>
+        </tr>
+        <!-- <tr>
           <th>開始時間</th>
           <td th:text="${#temporals.format(record.startTime, 'HH:mm')}"></td>
         </tr>
@@ -39,7 +39,7 @@
         <tr>
           <th>休憩時間</th>
           <td th:text="${#temporals.format(record.breakTime, 'HH:mm')}"></td>
-        </tr>
+        </tr> -->
         <tr>
           <th>学習時間（合計）</th>
           <td th:text="${#temporals.format(record.sumTime, 'HH:mm')}"></td>
@@ -69,18 +69,25 @@
           <td th:text="${#temporals.format(record.updatedAt, 'yyyy/MM/dd HH:mm:ss')}"></td>
         </tr>
         <tr>
-          <th></th>
+          <th>EDIT／DELETE</th>
           <td>
-            <form th:action="@{/record/__${record.id}__/edit}" method="post">
-              <button type="submit" class="btn btn-primary active">編集</button>
-            </form>
+            <div class="container text-center">
+              <div class="row row-cols-auto">
+                <div class="col">
+                  <form method="post" th:action="@{/record/__${record.id}__/edit}">
+                    <button type="submit" class="btn btn-primary active">編集</button>
+                  </form>
+                </div>
+                <div class="col">
+                  <form method="post" th:formaction="@{/record/__${record.id}__/delete}">
+                    <button type="submit" class="btn btn-danger active" onclick="return confirm('学習記録を削除します。\n本当に削除しますか？');">削除</button>
+                  </form>
+                </div>
+              </div>
+            </div>
           </td>
         </tr>
       </table>
-          <!-- <form th:action="@{/record/__${record.id}__/delete}" method="post">
-              <button type="submit">削除</button>
-            </form> -->
-      
     </div>
   </div>
 </body>

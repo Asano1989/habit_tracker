@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.example.learningtracker.config.LoginUserDetailService;
@@ -26,7 +27,6 @@ import com.example.learningtracker.entity.User;
 import com.example.learningtracker.repository.RecordRepository;
 import com.example.learningtracker.service.LearningSubjectService;
 import com.example.learningtracker.service.RecordService;
-
 
 @Controller
 public class RecordController {
@@ -97,6 +97,23 @@ public class RecordController {
         return mv;
     }
 
+    @GetMapping("/record/{id}/edit")
+    public ModelAndView getEditRecord(@PathVariable(name="id") int id, @AuthenticationPrincipal LoginUserDetails loginUser, ModelAndView mv) {
+        Record record = recordRepository.findById(id).get();
+        User user = loginUser.getUser();
+
+        if (record.getLearningSubject().getUser().getId() == user.getId()) {
+            mv.addObject("record", record);
+            mv.addObject("userName", user.getName());
+            mv.addObject("lSubject", learningSubjectService.findAllByUserId(loginUser));
+            mv.addObject("selectedValue", record.getLearningSubjectId());
+            mv.setViewName("record/recordEditForm");
+        } else {
+            mv.setViewName("record/records");
+        }
+        return mv;
+    }
+
     @PostMapping("/record/{id}/edit")
     public ModelAndView editRecord(@PathVariable(name="id") int id, @AuthenticationPrincipal LoginUserDetails loginUser, ModelAndView mv) {
         Record record = recordRepository.findById(id).get();
@@ -108,9 +125,8 @@ public class RecordController {
             mv.addObject("selectedValue", record.getLearningSubjectId());
             mv.setViewName("record/recordEditForm");
         } else {
-            mv.setViewName("user/userHome");
+            mv.setViewName("record/records");
         }
-
         return mv;
     }
 
@@ -136,7 +152,7 @@ public class RecordController {
             recordRepository.deleteById(record.getId());
             return "redirect:/record";
         }
- 
+
         model.addAttribute("record", record);
         model.addAttribute("userName", loginUser.getUser().getName());
         return "redirect:/record/{id}";
