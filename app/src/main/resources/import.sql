@@ -1,5 +1,6 @@
 INSERT INTO users(id, account_id, password, name, created_at, updated_at) VALUES (1, 'admin', '$2a$10$3Ig0SBonbQXik.IUrxNMh.2By/JmZiQvNhvO/.aFCrjv4Ad3Omp8m', 'admin', NOW(), NOW());
 INSERT INTO users(id, account_id, password, name, created_at, updated_at) VALUES (2, 'asano69a', '$2a$10$m9FxtHPwoZFDyCyNPjJd4OpoBHFavlbhWhB/fDTT5UI3Rvde2ocnK', 'あさの', NOW(), NOW());
+SELECT setval('users_id_seq', (SELECT MAX(id) FROM users));
 INSERT INTO learning_subjects(id, user_id, name, description, created_at, updated_at) VALUES (1, 2, 'test_subject01', 'testTESTテストてすとtestTESTテストてすとtestTESTてすと', NOW(), NOW());
 INSERT INTO learning_subjects(id, user_id, name, description, created_at, updated_at) VALUES (2, 2, 'test_subject02', 'testTESTテストてすとtestTESTテストてすとtestTESTテストてすと', NOW(), NOW());
 INSERT INTO learning_subjects(id, user_id, name, description, created_at, updated_at) VALUES (3, 1, 'test_subject03', 'testTESTテストてすとtestTESTテストてすとtestTESTテストてすと', NOW(), NOW());
@@ -7,7 +8,7 @@ SELECT setval('learning_subjects_id_seq', (SELECT MAX(id) FROM learning_subjects
 INSERT INTO records(id, learning_subject_id, date, start_time, stop_time, sum_time, pomodoro, uses_pomodoro, memo, break_time, is_published, created_at, updated_at) VALUES (1, 1, '2025-10-31', '16:00:00', '16:50:00', '00:50:00', 2, TRUE, 'てすとtestTESTテストてすとtestTESTテストてすとtestTESTテストてすとtestTESTテストてすとtestTESTテスト', '00:00:00', FALSE, NOW(), NOW());
 INSERT INTO records(id, learning_subject_id, date, start_time, stop_time, sum_time, pomodoro, uses_pomodoro, memo, break_time, is_published, created_at, updated_at) VALUES (2, 1, '2025-10-31', '17:00:00', '16:25:00', '00:25:00', 1, TRUE, 'test', '00:00:00', TRUE, NOW(), NOW());
 INSERT INTO records(id, learning_subject_id, date, start_time, stop_time, sum_time, pomodoro, uses_pomodoro, memo, break_time, is_published, created_at, updated_at) VALUES (3, 1, '2025-10-31', '17:00:00', '16:25:00', '00:25:00', 1, TRUE, 'てすとtestTESTテストてすとtestTESTテストてすとtestTESTテストてすとtestTESTテストてすとtestTESTテスト', '00:00:00', TRUE, NOW(), NOW());
-INSERT INTO records(id, learning_subject_id, date, start_time, stop_time, sum_time, pomodoro, uses_pomodoro, memo, break_time, is_published, created_at, updated_at) VALUES (4, 2, '2025-10-31', '17:00:00', '16:25:00', '00:25:00', 1, TRUE, 'test4', '00:00:00', TRUE, NOW(), NOW());
+INSERT INTO records(id, learning_subject_id, date, start_time, stop_time, sum_time,  uses_pomodoro, memo, break_time, is_published, created_at, updated_at) VALUES (4, 2, '2025-10-31', '17:00:00', '16:25:00', '00:25:00', FALSE, 'test4', '00:00:00', TRUE, NOW(), NOW());
 SELECT setval('records_id_seq', (SELECT MAX(id) FROM records));
 INSERT INTO todo(title,importance,urgency,deadline,done) VALUES('todo-1',0,0,'2020-10-01','N');
 INSERT INTO todo(title,importance,urgency,deadline,done) VALUES('todo-2',0,1,'2020-10-02','Y');
@@ -29,5 +30,3 @@ INSERT INTO todo(title,importance,urgency,deadline,done) VALUES('todo-17',0,0,'2
 INSERT INTO todo(title,importance,urgency,deadline,done) VALUES('todo-18',0,1,'2020-10-18','Y');
 INSERT INTO todo(title,importance,urgency,deadline,done) VALUES('todo-19',1,0,'2020-10-19','N');
 INSERT INTO todo(title,importance,urgency,deadline,done) VALUES('todo-20',1,1,'2020-10-20','Y');
-SELECT setval('users_id_seq', (SELECT MAX(id) FROM users));
-SELECT setval('learning_subjects_id_seq', (SELECT MAX(id) FROM learning_subjects));

@@ -9,8 +9,8 @@ import org.springframework.stereotype.Service;
 
 import com.example.learningtracker.entity.LearningSubject;
 import com.example.learningtracker.entity.Record;
-import com.example.learningtracker.controller.form.LearningSubjectForm;
-import com.example.learningtracker.controller.form.RecordForm;
+import com.example.learningtracker.form.LearningSubjectForm;
+import com.example.learningtracker.form.RecordForm;
 import com.example.learningtracker.repository.LearningSubjectRepository;
 import com.example.learningtracker.repository.RecordRepository;
 import com.example.learningtracker.config.LoginUserDetails;

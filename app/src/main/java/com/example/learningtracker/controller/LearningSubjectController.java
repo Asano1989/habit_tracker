@@ -19,8 +19,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.example.learningtracker.controller.form.LearningSubjectForm;
 import com.example.learningtracker.entity.LearningSubject;
+import com.example.learningtracker.form.LearningSubjectForm;
 import com.example.learningtracker.repository.LearningSubjectRepository;
 import com.example.learningtracker.config.LoginUserDetails;
 import com.example.learningtracker.service.LearningSubjectService;

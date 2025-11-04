@@ -1,6 +1,9 @@
-package com.example.learningtracker.controller.form;
+package com.example.learningtracker.form;
 
 import java.io.Serializable;
+
+import com.example.learningtracker.validation.ValidationGroups.Creation;
+import com.example.learningtracker.validation.ValidationGroups.Update;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -15,9 +18,11 @@ public class UserForm implements Serializable {
     @Pattern(regexp = "^[ -~]+$", message = "アカウント名は半角英数字と記号で入力してください")
     private String accountId;
 
-    @NotBlank(message = "パスワードを入力してください")
-    @Size(max = 255, message = "パスワードは255文字以内で入力してください")
+    @NotBlank(message = "パスワードを入力してください", groups = {Creation.class})
+    @Size(min = 0, max = 255, message = "パスワードは255文字以内で入力してください", groups = {Creation.class, Update.class})
     private String password;
+
+    private String passwordConfirmation;
 
     @NotBlank(message = "名前を入力してください")
     @Size(min = 1, max = 50, message = "名前は50文字以内で入力してください")

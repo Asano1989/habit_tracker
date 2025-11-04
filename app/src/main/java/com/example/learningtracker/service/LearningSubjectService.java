@@ -8,7 +8,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 
 import com.example.learningtracker.entity.LearningSubject;
-import com.example.learningtracker.controller.form.LearningSubjectForm;
+import com.example.learningtracker.form.LearningSubjectForm;
 import com.example.learningtracker.repository.LearningSubjectRepository;
 import com.example.learningtracker.config.LoginUserDetails;
 

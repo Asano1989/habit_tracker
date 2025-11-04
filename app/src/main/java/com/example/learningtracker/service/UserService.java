@@ -23,4 +23,19 @@ public class UserService {
         user.setPassword(encodedPassword);
         return userRepository.save(user);
     }
+
+    public boolean isSamePassword(String password, String passwordConfirmation) {
+        return password.equals(passwordConfirmation);
+    }
+
+    public User updateWithoutPassword(User user, String password) {
+        user.setPassword(password);
+        return userRepository.save(user);
+    }
+
+    public User update(User user, String rawPassword) {
+        String encodedPassword = passwordEncoder.encode(rawPassword);
+        user.setPassword(encodedPassword);
+        return userRepository.save(user);
+    }
 }

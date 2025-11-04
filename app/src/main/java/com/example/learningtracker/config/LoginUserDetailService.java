@@ -42,4 +42,13 @@ public class LoginUserDetailService implements UserDetailsService {
         }
         return true;
     }
+
+    public boolean isExistUserWithId(String accountId, Integer userId) {
+        String sql = "SELECT COUNT(*) FROM users WHERE account_id = ? AND id != ?";
+        int count = jdbcTemplate.queryForObject(sql, Integer.class, new Object[] { accountId, userId });
+        if (count == 0) {
+            return false;
+        }
+        return true;
+    }
 }

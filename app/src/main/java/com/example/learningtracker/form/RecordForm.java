@@ -1,4 +1,4 @@
-package com.example.learningtracker.controller.form;
+package com.example.learningtracker.form;
 
 import java.io.Serializable;
 import java.time.LocalDate;
