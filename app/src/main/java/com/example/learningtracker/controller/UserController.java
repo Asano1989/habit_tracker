@@ -22,7 +22,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.learningtracker.entity.User;
 import com.example.learningtracker.form.UserForm;
-import com.example.learningtracker.entity.LearningSubject;
 import com.example.learningtracker.entity.Record;
 import com.example.learningtracker.repository.UserRepository;
 import com.example.learningtracker.service.RecordService;
@@ -32,14 +31,12 @@ import com.example.learningtracker.validation.ValidationGroups.Update;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import lombok.extern.slf4j.Slf4j;
 
 import com.example.learningtracker.config.LoginUserDetailService;
 import com.example.learningtracker.config.LoginUserDetails;
 
 
 @Controller
-@Slf4j
 public class UserController {
 
     @Autowired
@@ -167,11 +164,8 @@ public class UserController {
         user.setName(userForm.getName());
         user.setUpdatedAt(now);
 
-        log.debug("Validation Errors: {}", result.hasErrors());
-
         // ユーザー名重複チェックとバリデーションエラーの判定
         boolean isAccountIdExist = loginUserDetailService.isExistUserWithId(userForm.getAccountId(), loginUser.getUser().getId());
-        log.debug("Account ID Exists (Duplicated): {}", isAccountIdExist);
 
         if (result.hasErrors() || isAccountIdExist) {
             if (isAccountIdExist) {
