@@ -9,6 +9,12 @@
 </head>
 <body class="bg-light">
   <div class="container">
+    <div th:if="${successMessage}">
+        <p th:text="${successMessage}"></p>
+    </div>
+    <div th:if="${errorMessage}">
+        <p th:text="${errorMessage}"></p>
+    </div>
     <div class="create">
       <form th:action="@{/subject/create/form}" method="post">
         <button type="submit" class="btn btn-primary active">新規追加</button>
@@ -24,7 +30,6 @@
           <th>createdAt</th>
           <th>updatedAt</th>
           <th>EDIT</th>
-          <th>DELETE</th>
         </tr>
         <tr th:each="subject:${subjectList}">
           <td th:text="${subject.id}"></td>
@@ -36,11 +41,6 @@
           <td>
             <form th:action="@{/subject/__${subject.id}__}" method="post">
               <button type="submit" class="btn btn-primary btn-sm active">編集</button>
-            </form>
-          </td>
-          <td>
-            <form th:action="@{/subject/__${subject.id}__/delete}" method="post">
-              <button type="submit" class="btn btn-primary btn-sm active">削除</button>
             </form>
           </td>
         </tr>

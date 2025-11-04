@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.learningtracker.controller.form.LearningSubjectForm;
 import com.example.learningtracker.entity.LearningSubject;
@@ -123,12 +125,21 @@ public class LearningSubjectController {
     @PostMapping("/subject/{id}/delete")
     public String deleteLearningSubject(@AuthenticationPrincipal LoginUserDetails loginUserDetails,
                                         @ModelAttribute LearningSubjectForm learningSubjectForm,
-                                        @PathVariable(name="id") int id) {
+                                        @PathVariable(name="id") int id,
+                                        RedirectAttributes redirectAttributes) {
         Optional<LearningSubject> lSubject = learningSubjectRepository.findById(id);
         LearningSubject subject = lSubject.get();
 
         if (loginUserDetails.getUser().getId() == subject.getUserId()) {
-            learningSubjectRepository.deleteById(subject.getId());
+            
+            try {
+                learningSubjectRepository.deleteById(subject.getId());
+                redirectAttributes.addFlashAttribute("successMessage", "学習項目が正常に削除されました。");
+            } catch (EmptyResultDataAccessException e) {
+                redirectAttributes.addFlashAttribute("errorMessage", "指定された学習項目が見つかりませんでした。");
+            } catch (Exception e) {
+                redirectAttributes.addFlashAttribute("errorMessage", "学習項目の削除に失敗しました。");
+            }
             return "redirect:/subject";
         }
 

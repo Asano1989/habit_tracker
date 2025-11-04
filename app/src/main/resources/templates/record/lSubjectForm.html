@@ -40,13 +40,13 @@
         </tr>
       </table>
       <div th:if="${session.mode == 'update'}">
-        <button type="submit" th:formaction="@{/subject/update}">更新</button>
-        <button type="submit" th:formaction="@{/subject/__${learningSubjectForm.id}__/delete}">削除</button>
-        <button type="submit" th:formaction="@{/subject/cancel}">キャンセル</button>
+        <button type="submit" th:formaction="@{/subject/update}" class="btn btn-primary active">更新</button>
+        <button type="submit" th:formaction="@{/subject/__${learningSubjectForm.id}__/delete}" onclick="return confirm('学習項目を削除すると、紐づいている学習記録も削除されます。\n本当に削除しますか？');" class="btn btn-danger active">削除</button>
+        <button type="submit" th:formaction="@{/subject/cancel}" class="btn btn-sm btn-warning">キャンセル</button>
       </div>
       <div th:unless="${session.mode == 'update'}">
-        <button type="submit" th:formaction="@{/subject/create/do}">登録</button>
-        <button type="submit" th:formaction="@{/subject/cancel}">キャンセル</button>
+        <button type="submit" th:formaction="@{/subject/create/do}" class="btn btn-primary active">登録</button>
+        <button type="submit" th:formaction="@{/subject/cancel}" class="btn btn-sm btn-warning">キャンセル</button>
       </div>
     </form>
   </body>
