@@ -7,6 +7,7 @@
   <link rel="stylesheet" th:href="@{/css/output.css}">
   <title>プロフィール編集</title>
 </head>
+<script th:src="@{/js/menu.js}"></script>
 <body class="bg-[#f1efec] text-[#123458]">
   <!-- Converted to Tailwind CSS -->
   <!-- Header (with sidebar for authenticated users) -->
@@ -78,7 +79,7 @@
         </form>
         
         <div class="mt-6 text-center border-t border-[#d4c9be] pt-6">
-          <a th:href="@{/user/home}" class="inline-block text-[#123458] font-semibold hover:underline">ユーザーホームに戻る</a>
+          <a th:href="@{/home}" class="inline-block text-[#123458] font-semibold hover:underline">ユーザーホームに戻る</a>
         </div>
       </div>
     </div>
