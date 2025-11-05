@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8">
+</head>
+<body>
+
+<!-- Menu Bar for Desktop -->
+<nav th:fragment="user-menu" class="user-menu-bar hidden md:block bg-white border-b-2 border-[#d4c9be] p-0 m-0" sec:authorize="isAuthenticated()">
+  <div class="user-menu-container flex flex-wrap gap-0 max-w-7xl mx-auto p-0">
+    <div class="user-menu-link flex-1 border-r border-[#d4c9be] p-0 m-0">
+      <a th:href="@{/record/create/form}" class="user-menu-item block px-6 py-4 text-[#123458] no-underline font-medium text-center transition-all hover:bg-[#d4c9be] hover:text-[#123458]">学習記録の新規登録</a>
+    </div>
+    <div class="user-menu-link flex-1 border-r border-[#d4c9be]p-0 m-0">
+      <a th:href="@{/record}" class="user-menu-item block px-6 py-4 text-[#123458] no-underline font-medium text-center transition-all hover:bg-[#d4c9be] hover:text-[#123458]">学習記録一覧へ</a>
+    </div>
+    <div class="user-menu-link flex-1 border-r border-[#d4c9be] p-0 m-0">
+      <a th:href="@{/subject}" class="user-menu-item block px-6 py-4 text-[#123458] no-underline font-medium text-center transition-all hover:bg-[#d4c9be] hover:text-[#123458]">学習項目一覧へ</a>
+    </div>
+    <div class="user-menu-link flex-1 border-r border-[#d4c9be] p-0 m-0">
+      <a th:href="@{/user}" class="user-menu-item block px-6 py-4 text-[#123458] no-underline font-medium text-center transition-all hover:bg-[#d4c9be] hover:text-[#123458]">ユーザー情報の更新</a>
+    </div>
+    <div class="user-menu-link flex-1 p-0 m-0">
+      <a th:href="@{/everyone}" class="user-menu-item block px-6 py-4 text-[#123458] no-underline font-medium text-center transition-all hover:bg-[#d4c9be] hover:text-[#123458]">みんなの学習記録へ</a>
+    </div>
+  </div>
+</nav>
+
+</body>
+</html>
