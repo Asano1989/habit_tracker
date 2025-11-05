@@ -1,67 +1,59 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" th:href="@{/css/output.css}">
   <link rel="stylesheet" th:href="@{/css/style.css}">
   <title>ユーザーホーム</title>
 </head>
-<body class="bg-light">
-  <div class="container">
-    <p th:text="${message}"></p>
-    <div class="menu-link">
-      <a th:href="@{/record}">学習記録一覧へ</a>
-    </div>
-    <div class="menu-link">
-      <a th:href="@{/subject}">学習項目一覧へ</a>
-    </div>
-    <div class="menu-link">
-      <a th:href="@{/user}">ユーザー情報の更新</a>
-    </div>
-    <div class="menu-link">
-      <a th:href="@{/everyone}">みんなの学習記録へ</a>
-    </div>
-  </div>
+<script th:src="@{/js/menu.js}"></script>
+<body class="bg-[#f1efec] text-[#123458]">
+  <!-- Converted to Tailwind CSS -->
+  <!-- Header Fragment -->
+  <div th:replace="fragments/header :: header"></div>
 
-  <div class="container p-2">
-    <div th:if="${updateSuccess}" class="alert alert-success" role="alert" th:text="${updateSuccess}"></div>
-  </div>
+  <!-- User Menu Bar Fragment -->
+  <div th:replace="fragments/userMenu :: user-menu"></div>
 
-  <div class="container">
-    <div class="create">
-      <form th:action="@{/record/create/form}" method="post">
-        <button type="submit" class="btn btn-primary active">新規追加</button>
-      </form>
-    </div>
-    <div class="table center p-2">
-      <table>
-        <tr>
-          <th>id</th>
-          <th>date</th>
-          <th>学習項目</th>
-          <!-- <th>start</th>
-          <th>stop</th>
-          <th>break</th> -->
-          <th>学習時間（分）</th>
-          <th>ポモドーロ数</th>
-          <th>memo</th>
-          <th>公開</th>
-        </tr>
-        <tr th:each="record:${recordList}">
-          <td><a th:href="@{/record/__${record.id}__}" th:text="${record.id}"></a></td>
-          <td th:text="${#temporals.format(record.date, 'yyyy/MM/dd')}"></td>
-          <td th:text="${record.learningSubject.name}"></td>
-          <!-- <td th:text="${#temporals.format(record.startTime, 'HH:mm')}"></td>
-          <td th:text="${#temporals.format(record.stopTime, 'HH:mm')}"></td>
-          <td th:text="${#temporals.format(record.breakTime, 'HH:mm')}"></td> -->
-          <td th:text="${#temporals.format(record.sumTime, 'HH:mm')}"></td>
-          <td><span th:text="${record.usesPomodoro== true ? __${record.pomodoro}__ :'－'}"></span></td>
-          <td th:text="${record.memo}"></td>
-          <td th:text="${record.isPublished== true ? '公開':'非公開'}"></td>
-        </tr>
-      </table>
+  <!-- Main Content -->
+  <div class="max-w-7xl mx-auto px-4 md:px-6 py-8 md:py-10 bg-[#f1efec]">
+    <!-- Success Alert -->
+    <div th:if="${updateSuccess}" class="bg-green-100 text-green-800 rounded px-4 py-3 mb-8" role="alert" th:text="${updateSuccess}"></div>
+
+    <!-- Records Table Section -->
+    <div class="records-section">
+      <h2 class="text-2xl md:text-3xl font-bold text-[#030303] m-4">最近の学習記録</h2>
+      <div class="w-full flex justify-center flex-wrap items-start gap-4">
+    
+        <div class="relative mt-6 flex w-64 flex-col rounded-xl bg-white bg-clip-border text-gray-700 shadow-md" th:each="record:${recordList}">
+          <div class="p-6">
+            <div class="grid grid-cols-2 gap-2 mb-2">
+              <div class="i-mdi-calendar-edit w-8 h-8"></div>
+              <div><h2 class="text-xl"><span th:text="${#temporals.format(record.date, 'yyyy/MM/dd')}"></span></h2></div>
+            </div>
+            <h5 class="mb-2 block font-sans text-xl font-semibold leading-snug tracking-normal text-blue-gray-900 antialiased">
+              <span class="text-xl mb-2" th:text="${record.learningSubject.name}"></span>
+            </h5>
+            <div class="grid grid-cols-2 gap-6 mt-2 mb-4">
+              <div>
+                time：<span class="font-bold text-2xl mb-2" th:text="${#temporals.format(record.sumTime, 'HH:mm')}"></span>
+              </div>
+              <div>
+                <span class="font-bold text-2xl mb-2" th:text="${record.usesPomodoro== true ? __${record.pomodoro}__ :'－'}"></span> <span th:text="${record.usesPomodoro== true ? 'pomodoro' : ''}"></span>
+              </div>
+            </div>
+            <p class="block font-sans text-base font-light leading-relaxed text-inherit antialiased">
+              <span th:text="${record.memo}"></span>
+            </p>
+          </div>
+          <div class="p-6 pt-0 ">
+            <a th:href="@{/record/__${record.id}__}" class="text-[#123458] font-semibold no-underline hover:underline">show more</a> <span class="i-lucide-arrow-up-right w-6 h-6 align-middle"></span>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </body>
 </html>
+

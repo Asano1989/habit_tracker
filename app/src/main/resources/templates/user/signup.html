@@ -1,85 +1,89 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <link rel="stylesheet" th:href="@{/css/style.css}">
-  <title>ユーザー登録</title>
+  <title>新規登録</title>
 </head>
-<body class="bg-light">
-  <div class="container">
-    <div class="row justify-content-center align-items-center min-vh-100 py-5">
-      <div class="col-12 col-md-7 col-lg-5 col-xl-4">
-        <div class="card shadow border-0">
-          <div class="card-body">
-            <div th:if="${signupError}" class="alert alert-danger" role="alert" th:text="${signupError}"></div>
-            
-            <form method="post" th:action="@{/signup}" th:object="${userForm}">
-              <div class="form-group">
-                <label for="accountId">ユーザー名</label>
-                <input 
-                  type="text" 
-                  class="form-control" 
-                  id="accountId" 
-                  name="accountId" 
-                  th:value="${userForm.accountId}"
-                  th:classappend="${#fields.hasErrors('accountId')} ? 'is-invalid' : ''"
-                  placeholder="ユーザー名を入力してください">
-                <div th:if="${accountIdError}" class="invalid-feedback d-block" th:text="${accountIdError}"></div>
-                <div th:if="${#fields.hasErrors('accountId')}" class="invalid-feedback d-block" th:errors="${userForm.accountId}"></div>
-              </div>
-              
-              <div class="form-group">
-                <label for="password">パスワード</label>
-                <input 
-                  type="password" 
-                  class="form-control" 
-                  id="password" 
-                  name="password" 
-                  th:value="${userForm.password}"
-                  th:classappend="${#fields.hasErrors('password')} ? 'is-invalid' : ''"
-                  placeholder="パスワードを入力してください">
-                <div th:if="${#fields.hasErrors('password')}" class="invalid-feedback d-block" th:errors="${userForm.password}"></div>
-              </div>
+<body class="bg-[#f1efec] text-[#123458]">
+  <!-- Converted to Tailwind CSS -->
+  <!-- Header (without sidebar for non-authenticated users) -->
+  <header th:replace="fragments/header :: header"></header>
 
-              <div class="form-group">
-                <label for="passwordConfirmation">パスワード（確認用）</label>
-                <input 
-                  type="password" 
-                  class="form-control" 
-                  id="passwordConfirmation" 
-                  name="passwordConfirmation" 
-                  value=""
-                  placeholder="パスワード（確認用）を入力してください">
-                <div th:if="${#fields.hasErrors('passwordConfirmation')}" class="invalid-feedback d-block" th:errors="${userForm.passwordConfirmation}"></div>
-              </div>
-              
-              <div class="form-group">
-                <label for="name">名前</label>
-                <input 
-                  type="text" 
-                  class="form-control" 
-                  id="name" 
-                  name="name" 
-                  th:value="${userForm.name}"
-                  th:classappend="${#fields.hasErrors('name')} ? 'is-invalid' : ''"
-                  placeholder="お名前を入力してください">
-                <div th:if="${#fields.hasErrors('name')}" class="invalid-feedback d-block" th:errors="${userForm.name}"></div>
-              </div>
-              
-              <!-- Button now uses btn-gradient class with moegi to kihada gradient from external CSS -->
-              <button type="submit" class="btn btn-gradient btn-lg btn-block">新規登録</button>
-            </form>
-            
-            <div class="home-link">
-              <a href="/">トップ画面に戻る</a>
-            </div>
+  <main class="flex justify-center items-center min-h-[calc(100vh-80px)] py-8 px-4 bg-[#f1efec]">
+    <div class="w-full max-w-md">
+      <div class="bg-white rounded-lg shadow-md p-8">
+        <h2 class="text-2xl font-bold text-[#030303] text-center mb-6">新規登録</h2>
+        
+        <div th:if="${signupError}" class="bg-red-100 text-red-800 rounded px-4 py-3 mb-6" role="alert" th:text="${signupError}"></div>
+        
+        <form method="post" th:action="@{/signup}" th:object="${userForm}">
+          <div class="mb-6">
+            <label for="accountId" class="block text-[#123458] font-semibold mb-2">ユーザー名</label>
+            <input 
+              type="text" 
+              class="w-full border border-[#d4c9be] rounded px-4 py-3 text-[#123458] bg-white focus:outline-none focus:border-[#123458] focus:ring-2 focus:ring-opacity-20 focus:ring-[#123458]" 
+              th:classappend="${#fields.hasErrors('accountId')} ? 'border-red-500' : ''"
+              id="accountId" 
+              name="accountId" 
+              th:value="${userForm.accountId}"
+              placeholder="ユーザー名を入力してください"
+              required>
+            <div th:if="${accountIdError}" class="text-red-600 text-sm mt-1" th:text="${accountIdError}"></div>
+            <div th:if="${#fields.hasErrors('accountId')}" class="text-red-600 text-sm mt-1" th:errors="${userForm.accountId}"></div>
           </div>
+          
+          <div class="mb-6">
+            <label for="password" class="block text-[#123458] font-semibold mb-2">パスワード</label>
+            <input 
+              type="password" 
+              class="w-full border border-[#d4c9be] rounded px-4 py-3 text-[#123458] bg-white focus:outline-none focus:border-[#123458] focus:ring-2 focus:ring-opacity-20 focus:ring-[#123458]" 
+              th:classappend="${#fields.hasErrors('password')} ? 'border-red-500' : ''"
+              id="password" 
+              name="password" 
+              th:value="${userForm.password}"
+              placeholder="パスワードを入力してください"
+              required>
+            <div th:if="${#fields.hasErrors('password')}" class="text-red-600 text-sm mt-1" th:errors="${userForm.password}"></div>
+          </div>
+
+          <div class="mb-6">
+            <label for="passwordConfirmation" class="block text-[#123458] font-semibold mb-2">パスワード（確認用）</label>
+            <input 
+              type="password" 
+              class="w-full border border-[#d4c9be] rounded px-4 py-3 text-[#123458] bg-white focus:outline-none focus:border-[#123458] focus:ring-2 focus:ring-opacity-20 focus:ring-[#123458]" 
+              th:classappend="${#fields.hasErrors('passwordConfirmation')} ? 'border-red-500' : ''"
+              id="passwordConfirmation" 
+              name="passwordConfirmation" 
+              placeholder="パスワード（確認用）を入力してください"
+              required>
+            <div th:if="${#fields.hasErrors('passwordConfirmation')}" class="text-red-600 text-sm mt-1" th:errors="${userForm.passwordConfirmation}"></div>
+          </div>
+          
+          <div class="mb-6">
+            <label for="name" class="block text-[#123458] font-semibold mb-2">名前</label>
+            <input 
+              type="text" 
+              class="w-full border border-[#d4c9be] rounded px-4 py-3 text-[#123458] bg-white focus:outline-none focus:border-[#123458] focus:ring-2 focus:ring-opacity-20 focus:ring-[#123458]" 
+              th:classappend="${#fields.hasErrors('name')} ? 'border-red-500' : ''"
+              id="name" 
+              name="name" 
+              th:value="${userForm.name}"
+              placeholder="お名前を入力してください"
+              required>
+            <div th:if="${#fields.hasErrors('name')}" class="text-red-600 text-sm mt-1" th:errors="${userForm.name}"></div>
+          </div>
+          
+          <button type="submit" class="w-full bg-[#123458] text-white font-semibold py-3 px-6 rounded hover:bg-[#0d1f36] transition-colors">新規登録</button>
+        </form>
+        
+        <div class="mt-6 text-center border-t border-[#d4c9be] pt-6">
+          <p class="mb-3 text-[#123458]">既にアカウントをお持ちですか？<a th:href="@{/login}" class="text-[#123458] font-semibold hover:underline">ログインはこちら</a></p>
+          <a th:href="@{/}" class="inline-block mt-3 text-[#123458] font-semibold hover:underline">トップ画面に戻る</a>
         </div>
       </div>
     </div>
-  </div>
-
+  </main>
 </body>
 </html>
