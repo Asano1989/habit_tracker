@@ -71,6 +71,7 @@ postgres_data_dev/
 # Build cache and layer exports
 **/.dockerignore
 **/node_modules/
+**/node/
 **/build/
 **/dist/
 **/__pycache__/
@@ -87,6 +88,7 @@ postgres_data_dev/
 .m2/
 
 # ==============================
-# いらない機能
+# いらないもの
 # ==============================
 app/src/main/java/com/example/learningtracker/todolist
+app/src/main/resources/static/css/output.css
