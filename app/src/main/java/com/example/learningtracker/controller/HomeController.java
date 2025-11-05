@@ -20,7 +20,7 @@ public class HomeController {
             mv.addObject("message", "ログインしています");
             mv.addObject("loggedin", true);
 
-            mv.setViewName("home");
+            mv.setViewName("user/userHome");
             return mv;
         } else {
             mv.addObject("message", message);

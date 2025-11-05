@@ -57,6 +57,18 @@ public class RecordController {
         return "record/records";
     }
 
+    @GetMapping("/record/create/form")
+    public ModelAndView recordForm(@AuthenticationPrincipal LoginUserDetails loginUser, ModelAndView mv) {
+        Record record = new Record();
+        mv.setViewName("record/recordCreateForm");
+        mv.addObject("lSubject", learningSubjectService.findAllByUserId(loginUser));
+        mv.addObject("userName", loginUser.getUser().getName());
+        mv.addObject("today", LocalDate.now());
+        mv.addObject("record", record);
+
+        return mv;
+    }
+
     @PostMapping("/record/create/form")
     public ModelAndView newRecord(@AuthenticationPrincipal LoginUserDetails loginUser, ModelAndView mv) {
         Record record = new Record();
@@ -70,7 +82,7 @@ public class RecordController {
     }
 
     @PostMapping("/record/create/do")
-    public String create(@AuthenticationPrincipal LoginUserDetails loginUser, @ModelAttribute @Validated RecordForm recordForm, BindingResult result, Model model) {
+    public String createRecord(@AuthenticationPrincipal LoginUserDetails loginUser, @ModelAttribute @Validated RecordForm recordForm, BindingResult result, Model model) {
         // バリデーションエラーの場合
         if (result.hasErrors()) {
             model.addAttribute("recordForm", recordForm);

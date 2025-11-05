@@ -57,11 +57,12 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public String login(Model model, HttpServletRequest req) {
+    public String login(Model model, HttpServletRequest req, @AuthenticationPrincipal LoginUserDetails loginUser) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.isAuthenticated() && !(authentication.getPrincipal() instanceof String)) {
+            List<Record> recordList = recordService.findAllRecordsByUser(loginUser);
+            model.addAttribute("recordList", recordList);
             model.addAttribute("message", "ログインしています");
-            model.addAttribute("loggedin", true);
             return "user/userHome";
         } else {
             HttpSession session = req.getSession(false);
@@ -74,6 +75,19 @@ public class UserController {
                 }
             }
             return "home";
+        }
+    }
+
+    @GetMapping("/login")
+    public String loginView(Model model, HttpServletRequest req, @AuthenticationPrincipal LoginUserDetails loginUser) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated() && !(authentication.getPrincipal() instanceof String)) {
+            List<Record> recordList = recordService.findAllRecordsByUser(loginUser);
+            model.addAttribute("recordList", recordList);
+            model.addAttribute("message", "ログインしています");
+            return "user/userHome";
+        } else {
+            return "user/login";
         }
     }
 
@@ -216,7 +230,6 @@ public class UserController {
             new SecurityContextLogoutHandler().logout(request, response, auth);
 
             // ログアウト処理が完了したらトップページへ
-            redirectAttributes.addFlashAttribute("message", "ログアウトしました");
             return "redirect:/";
         }
         return "home";
