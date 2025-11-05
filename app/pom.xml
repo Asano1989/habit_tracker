@@ -116,7 +116,7 @@
 						<phase>generate-resources</phase>
 						<configuration>
 							<arguments>install</arguments>
-							<workingDirectory>frontend</workingDirectory>
+							<workingDirectory></workingDirectory>
 						</configuration>
 					</execution>
 
@@ -126,7 +126,7 @@
 						<phase>generate-resources</phase>
 						<configuration>
 							<arguments>run build:css</arguments>
-							<workingDirectory>frontend</workingDirectory>
+							<workingDirectory></workingDirectory>
 						</configuration>
 					</execution>
 
