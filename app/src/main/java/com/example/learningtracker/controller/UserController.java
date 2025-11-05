@@ -60,9 +60,10 @@ public class UserController {
     public String login(Model model, HttpServletRequest req, @AuthenticationPrincipal LoginUserDetails loginUser) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.isAuthenticated() && !(authentication.getPrincipal() instanceof String)) {
-            List<Record> recordList = recordService.findAllRecordsByUser(loginUser);
+            List<Record> recordList = recordService.findAllRecordsByUserRecent(loginUser);
             model.addAttribute("recordList", recordList);
-            model.addAttribute("message", "ログインしています");
+            model.addAttribute("userName", loginUser.getUser().getName());
+            model.addAttribute("isLogin", "ログインしています");
             return "user/userHome";
         } else {
             HttpSession session = req.getSession(false);
@@ -82,9 +83,10 @@ public class UserController {
     public String loginView(Model model, HttpServletRequest req, @AuthenticationPrincipal LoginUserDetails loginUser) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.isAuthenticated() && !(authentication.getPrincipal() instanceof String)) {
-            List<Record> recordList = recordService.findAllRecordsByUser(loginUser);
+            List<Record> recordList = recordService.findAllRecordsByUserRecent(loginUser);
             model.addAttribute("recordList", recordList);
-            model.addAttribute("message", "ログインしています");
+            model.addAttribute("userName", loginUser.getUser().getName());
+            model.addAttribute("isLogin", "ログインしています");
             return "user/userHome";
         } else {
             return "user/login";
@@ -95,7 +97,7 @@ public class UserController {
     public String newSignup(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.isAuthenticated() && !(authentication.getPrincipal() instanceof String)) {
-            model.addAttribute("message", "ログインしています");
+            model.addAttribute("isLogin", "ログインしています");
             return "home";
         } else {
             return "user/signup";
@@ -217,8 +219,9 @@ public class UserController {
             }
         }
 
-        List<Record> recordList = recordService.findAllRecordsByUser(loginUser);
+        List<Record> recordList = recordService.findAllRecordsByUserRecent(loginUser);
         model.addAttribute("recordList", recordList);
+        model.addAttribute("userName", loginUser.getUser().getName());
         model.addAttribute("updateSuccess", "ユーザー情報の更新が完了しました");
         return "user/userHome";
     }
@@ -239,14 +242,14 @@ public class UserController {
     public ModelAndView home(@AuthenticationPrincipal LoginUserDetails loginUser, Model model, ModelAndView mav) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.isAuthenticated() && !(authentication.getPrincipal() instanceof String)) {
-            List<Record> recordList = recordService.findAllRecordsByUser(loginUser);
+            List<Record> recordList = recordService.findAllRecordsByUserRecent(loginUser);
             model.addAttribute("recordList", recordList);
+            model.addAttribute("userName", loginUser.getUser().getName());
 
-            mav.addObject("message", "ようこそ、" + authentication.getName() + "さん！");
             mav.setViewName("user/userHome");
             return mav;
         } else {
-            model.addAttribute("message", "ログインしてください");
+            model.addAttribute("isLogin", "ログインしてください");
             mav.setViewName("home");
             return mav;
         }

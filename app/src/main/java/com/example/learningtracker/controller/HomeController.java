@@ -28,13 +28,13 @@ public class HomeController {
         if (authentication != null && authentication.isAuthenticated() && !(authentication.getPrincipal() instanceof String)) {
             List<Record> recordList = recordService.findAllRecordsByUser(loginUser);
             mv.addObject("recordList", recordList);
-            mv.addObject("message", "ログインしています");
-            mv.addObject("loggedin", true);
+            mv.addObject("userName", loginUser.getUser().getName());
+            mv.addObject("isLogin", "ログインしています");
 
             mv.setViewName("user/userHome");
             return mv;
         } else {
-            mv.addObject("message", message);
+            mv.addObject("lsLogin", message);
             mv.setViewName("home");
             return mv;
         }

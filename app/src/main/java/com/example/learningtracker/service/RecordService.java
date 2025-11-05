@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import com.example.learningtracker.entity.LearningSubject;
 import com.example.learningtracker.entity.Record;
-import com.example.learningtracker.form.LearningSubjectForm;
 import com.example.learningtracker.form.RecordForm;
 import com.example.learningtracker.repository.LearningSubjectRepository;
 import com.example.learningtracker.repository.RecordRepository;
@@ -38,7 +37,13 @@ public class RecordService {
 
     public List<Record> findAllRecordsByUser(LoginUserDetails loginUser) {
         Integer userId = loginUser.getUser().getId();
-        List<Record> userRecords = recordRepository.findByLearningSubject_User_Id(userId);
+        List<Record> userRecords = recordRepository.findByLearningSubject_User_IdOrderByIdDesc(userId);
+        return userRecords;
+    }
+
+    public List<Record> findAllRecordsByUserRecent(LoginUserDetails loginUser) {
+        Integer userId = loginUser.getUser().getId();
+        List<Record> userRecords = recordRepository.findByLearningSubject_User_IdOrderByCreatedAtDesc(userId);
         return userRecords;
     }
 

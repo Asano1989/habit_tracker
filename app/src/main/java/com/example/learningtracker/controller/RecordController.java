@@ -103,6 +103,9 @@ public class RecordController {
             mv.addObject("userName", user.getName());
             mv.setViewName("record/detail");
         } else {
+            List<Record> recordList = recordService.findAllRecordsByUserRecent(loginUser);
+            mv.addObject("recordList", recordList);
+            mv.addObject("userName", user.getName());
             mv.setViewName("user/userHome");
         }
 
