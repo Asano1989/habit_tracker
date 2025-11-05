@@ -41,46 +41,26 @@ document.addEventListener('DOMContentLoaded', () => {
         const hasStudyTime = timeStringToMinutes(minutesInput.value) > 0;
         const hasPomodoro = pomodoro.value && parseInt(pomodoro.value) > 0;
 
-        // 要件: ポモドーロにチェックがある場合
+        // ★ 修正点: 初期状態はすべて解除
+        minutesInput.removeAttribute('readonly');
+        pomodoro.removeAttribute('readonly');
+        
+        // 状態に応じた READONLY 設定
         if (checkInput.checked) {
-            minutesInput.removeAttribute('readonly'); // 学習時間は入力・変更可能
-            
-            // 学習時間がある場合はポモドーロを自動算出モード (READONLY) にする
+            // チェックON: 学習時間があればポモドーロをロック
             if (hasStudyTime) {
                 pomodoro.setAttribute('readonly', true);
             } else {
-                // 学習時間がなければポモドーロ数入力を許可
-                pomodoro.removeAttribute('readonly'); 
+                // 学習時間がなければポモドーロ入力を許可
+                pomodoro.removeAttribute('readonly');
             }
         } 
-        // 要件: ポモドーロにチェックがない場合
-        else {
-            // 学習時間がある、またはポモドーロ数がある場合は、手動入力モード
-            if (hasStudyTime || hasPomodoro) {
-                minutesInput.removeAttribute('readonly'); 
-                 pomodoro.setAttribute('readonly', true); // 学習時間があればポモドーロは手動で変更不可
-            } 
-            // どちらも入力がない場合
-            else {
-                minutesInput.removeAttribute('readonly');
-                pomodoro.removeAttribute('readonly');
-            }
-            
-            // ポモドーロ数は基本的に学習時間がある場合は使わないので、非チェック時はREADONLYにする
-            // ただし、ポモドーロ数が手動で入っている場合は、それを基に計算させるため許可する
-            if (hasStudyTime) {
-                pomodoro.setAttribute('readonly', true);
-            } else if (hasPomodoro) {
-                 minutesInput.setAttribute('readonly', true); // ポモドーロ数があれば学習時間はロック
-            } else {
-                minutesInput.removeAttribute('readonly');
-                pomodoro.removeAttribute('readonly');
-            }
-        }
         
-        // ポモドーロ数で入力している場合は、学習時間をロック
-        if (hasPomodoro && !checkInput.checked) {
-            minutesInput.setAttribute('readonly', true);
+        // ポモドーロ数で計算されている場合 (チェックの有無に関わらず)
+        if (hasPomodoro) {
+             // ポモドーロ数から学習時間を算出した状態
+             minutesInput.setAttribute('readonly', true); // 学習時間をロック
+             pomodoro.removeAttribute('readonly'); // ポモドーロ数の変更は許可
         }
     }
     
@@ -125,6 +105,10 @@ document.addEventListener('DOMContentLoaded', () => {
         // UI上の表示をリセット
         timeNotice.textContent = '';
         pomodoroNotice.textContent = '';
+        
+        // 変更前の状態に基づいて、readonly制御を一旦解除
+        minutesInput.removeAttribute('readonly');
+        pomodoro.removeAttribute('readonly');
 
         // 1. チェックボックスの変更の処理
         if (changedFieldId === 'usesPomodoro') {
@@ -153,13 +137,13 @@ document.addEventListener('DOMContentLoaded', () => {
             
             // ポモドーロにチェックが入っている場合のみ、ポモドーロ数を算出
             if (checkInput.checked && pureStudyMinutes > 0) {
-                apiUrl = `/api/calculator/time-to-pomodoro?pureStudyMinutes=${pureStudyMinutes}`;
-                shouldCallApi = true;
+                 apiUrl = `/api/calculator/time-to-pomodoro?pureStudyMinutes=${pureStudyMinutes}`;
+                 shouldCallApi = true;
             } else {
                  // チェックなし、または入力値が0の場合は状態のみ更新
                  pomodoro.value = ''; // 学習時間手入力時はポモドーロをクリア
-                setFormState();
-                return;
+                 setFormState();
+                 return;
             }
         }
 
@@ -168,17 +152,19 @@ document.addEventListener('DOMContentLoaded', () => {
             const pomodoroValue = parseInt(pomodoro.value, 10);
             
             if (pomodoroValue > 0) {
+                // ポモドーロ数が入力されたら自動でチェックを入れる
                 if (!checkInput.checked) {
                     checkInput.checked = true;
                 }
-                // ポモドーロ数から学習時間を算出
-                apiUrl = `/api/calculator/pomodoro-to-time?pomodoroCount=${pomodoroValue}`;
-                shouldCallApi = true;
+                
+                 // ポモドーロ数から学習時間を算出
+                 apiUrl = `/api/calculator/pomodoro-to-time?pomodoroCount=${pomodoroValue}`;
+                 shouldCallApi = true;
             } else {
-                 // 値がクリアされた場合
-                minutesInput.value = '00:00';
-                setFormState();
-                return;
+                 // 値がクリアされた場合、学習時間をクリアし、状態をリセット
+                 minutesInput.value = '00:00';
+                 setFormState();
+                 return;
             }
         }
         
@@ -220,22 +206,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     resetButton.addEventListener('click', initializeFormState);
 
+    /**
+     * フォームを初期状態にリセット（編集画面対応済み）
+     */
     function initializeFormState() {
-        // すべての READONLY を解除 (編集画面でも初期設定は解除)
-        [minutesInput, pomodoro].forEach(input => input.removeAttribute('readonly'));
-
-        // ★ 修正点: 値が空の場合のみ '00:00' にリセットする
-        if (minutesInput.value === '' || minutesInput.value === null) {
-            minutesInput.value = '00:00';
-        }
+        // ★ 修正点 1: 学習時間を明示的にリセットする
+        minutesInput.value = '00:00';
+        pomodoro.value = '';
+        checkInput.checked = false; // チェックボックスもリセット
         
-        // ポモドーロ数の値は、もともとセットされていればそのまま利用
-        if (pomodoro.value === '' || pomodoro.value === null) {
-            pomodoro.value = '';
-        }
-        
-        // その他のフィールドは初期状態のまま（Thymeleafの値を利用）
-
         timeNotice.textContent = '';
         pomodoroNotice.textContent = '';
         
@@ -243,6 +222,12 @@ document.addEventListener('DOMContentLoaded', () => {
         setFormState();
     }
     
-    // 初期化処理: ページロード時に実行
-    initializeFormState(); 
+    // 初期化処理: ページロード時に実行 (編集画面での既存値保持のため、値の有無チェックはsetFormStateに任せる)
+    if (minutesInput.value === '' || minutesInput.value === null) {
+         minutesInput.value = '00:00';
+    }
+    if (pomodoro.value === '' || pomodoro.value === null) {
+         pomodoro.value = '';
+    }
+    setFormState();
 });
