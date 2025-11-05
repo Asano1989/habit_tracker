@@ -16,7 +16,7 @@ public class SecurityConfig {
     http.formLogin(login -> login //  フォーム認証を使う
         .permitAll()) //  フォーム認証画面は認証不要
         .authorizeHttpRequests(authz -> authz
-            .requestMatchers("/css/**", "/js/**", "/image/**").permitAll()
+            .requestMatchers("/css/**", "/js/**", "/image/**", "/favicon.ico").permitAll()
             .requestMatchers("/todo", "/todo/query").permitAll()
             .requestMatchers("/signup", "/login", "/logout", "/error").permitAll()
             .requestMatchers("/").permitAll()
