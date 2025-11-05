@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" th:href="@{/css/output.css}">
   <link rel="stylesheet" th:href="@{/css/style.css}">
-  <title>学習記録編集フォーム</title>
+  <title>学習記録の編集フォーム | The Pomo - 学習時間記録アプリ</title>
 </head>
 <script th:src="@{/js/menu.js}"></script>
 <body class="bg-[#f1efec] text-[#123458]">
@@ -23,9 +23,12 @@
 
       <form th:action="@{/}" method="post" th:object="${record}" class="space-y-6">
         <!-- Hidden ID field -->
-        <div class="hidden">
-          <span th:text="*{id}"></span>
-          <input type="hidden" th:field="*{id}">
+        <div class="mb-8 pb-6 border-b border-[#d4c9be]" th:if="${record.id}">
+          <label for="id" class="block text-sm font-semibold text-[#030303] mb-3">ID</label>
+          <div class="bg-[#f1efec] px-4 py-3 rounded border border-[#d4c9be] text-[#123458]">
+            <span th:text="*{id}">ー</span>
+            <input type="hidden" th:field="*{id}">
+          </div>
         </div>
 
         <!-- Learning Subject Select -->

@@ -10,15 +10,15 @@
       <!-- Left: Hamburger Menu (for logged-in users) -->
       <div class="flex-shrink-0">
         <button class="hamburger-btn md:hidden flex flex-col gap-1.5 bg-transparent border-0 cursor-pointer p-2 -ml-2" id="hamburger-btn" sec:authorize="isAuthenticated()">
-          <span class="hamburger-line w-6 h-0.5 bg-[#123458] transition-all duration-300"></span>
-          <span class="hamburger-line w-6 h-0.5 bg-[#123458] transition-all duration-300"></span>
-          <span class="hamburger-line w-6 h-0.5 bg-[#123458] transition-all duration-300"></span>
+          <span class="hamburger-line w-6 h-0.2 bg-[#123458] transition-all duration-300"></span>
+          <span class="hamburger-line w-6 h-0.2 bg-[#123458] transition-all duration-300"></span>
+          <span class="hamburger-line w-6 h-0.2 bg-[#123458] transition-all duration-300"></span>
         </button>
       </div>
 
       <!-- Center: Logo/Title -->
       <div class="flex-1 text-center">
-        <h1 class="text-2xl md:text-3xl font-bold text-[#030303] tracking-wide"><a th:href="@{/}">学習時間トラッカー</a></h1>
+        <a th:href="@{/}"><img th:src="@{/image/ThePomoHeaderLogo.png}" class="h-10 w-auto md:h-12 lg:h-14 object-contain" width="180"></a>
       </div>
 
       <!-- Right: Auth Menu -->
@@ -44,11 +44,11 @@
     <!-- Sidebar menu hidden by default, shown on mobile only -->
     <nav class="sidebar-menu fixed left-0 top-20 w-64 h-[calc(100vh-80px)] bg-[#f1efec] border-r-2 border-[#d4c9be] overflow-y-auto z-40 transition-transform duration-300 -translate-x-full hidden md:hidden" id="sidebar-menu" sec:authorize="isAuthenticated()">
       <ul class="list-none p-0 m-0 py-4">
-        <li class="border-b border-[#d4c9be]"><a th:href="@{/record/create/form}" class="block px-6 py-4 text-[#123458] no-underline font-medium transition-all border-l-4 border-transparent hover:bg-[#d4c9be] hover:text-[#123458] hover:border-l-[#123458] hover:pl-7">学習記録の新規登録</a></li>
-        <li class="border-b border-[#d4c9be]"><a th:href="@{/record}" class="block px-6 py-4 text-[#123458] no-underline font-medium transition-all border-l-4 border-transparent hover:bg-[#d4c9be] hover:text-[#123458] hover:border-l-[#123458] hover:pl-7">学習記録一覧へ</a></li>
-        <li class="border-b border-[#d4c9be]"><a th:href="@{/subject}" class="block px-6 py-4 text-[#123458] no-underline font-medium transition-all border-l-4 border-transparent hover:bg-[#d4c9be] hover:text-[#123458] hover:border-l-[#123458] hover:pl-7">学習項目一覧へ</a></li>
-        <li class="border-b border-[#d4c9be]"><a th:href="@{/user}" class="block px-6 py-4 text-[#123458] no-underline font-medium transition-all border-l-4 border-transparent hover:bg-[#d4c9be] hover:text-[#123458] hover:border-l-[#123458] hover:pl-7">ユーザー情報の更新</a></li>
-        <li class="border-b border-[#d4c9be]"><a th:href="@{/everyone}" class="block px-6 py-4 text-[#123458] no-underline font-medium transition-all border-l-4 border-transparent hover:bg-[#d4c9be] hover:text-[#123458] hover:border-l-[#123458] hover:pl-7">みんなの学習記録へ</a></li>
+        <li class="border-b border-[#d4c9be]"><a th:href="@{/record/create/form}" class="block px-6 py-4 text-[#123458] no-underline font-medium transition-all border-l-4 border-transparent hover:bg-[#d4c9be] hover:text-[#123458] hover:border-l-[#123458] hover:pl-7">新しい記録を登録</a></li>
+        <li class="border-b border-[#d4c9be]"><a th:href="@{/record}" class="block px-6 py-4 text-[#123458] no-underline font-medium transition-all border-l-4 border-transparent hover:bg-[#d4c9be] hover:text-[#123458] hover:border-l-[#123458] hover:pl-7">学習の記録一覧</a></li>
+        <li class="border-b border-[#d4c9be]"><a th:href="@{/subject}" class="block px-6 py-4 text-[#123458] no-underline font-medium transition-all border-l-4 border-transparent hover:bg-[#d4c9be] hover:text-[#123458] hover:border-l-[#123458] hover:pl-7">学習の項目一覧</a></li>
+        <li class="border-b border-[#d4c9be]"><a th:href="@{/user}" class="block px-6 py-4 text-[#123458] no-underline font-medium transition-all border-l-4 border-transparent hover:bg-[#d4c9be] hover:text-[#123458] hover:border-l-[#123458] hover:pl-7">ユーザー情報</a></li>
+        <li class="border-b border-[#d4c9be]"><a th:href="@{/everyone}" class="block px-6 py-4 text-[#123458] no-underline font-medium transition-all border-l-4 border-transparent hover:bg-[#d4c9be] hover:text-[#123458] hover:border-l-[#123458] hover:pl-7">みんなの記録</a></li>
       </ul>
     </nav>
   </header>

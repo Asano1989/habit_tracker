@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" th:href="@{/css/output.css}">
   <link rel="stylesheet" th:href="@{/css/style.css}">
-  <title>学習時間記録アプリ</title>
+  <title>The Pomo - 学習時間記録アプリ</title>
 </head>
 <script th:src="@{/js/menu.js}"></script>
 <body class="bg-[#f1efec] text-[#123458]">
@@ -34,7 +34,9 @@
                 ログアウトしました
               </div>
 
-              <div th:unless="${message.equals('')}" class="bg-green-100 text-green-800 rounded px-4 py-3 mb-6" role="alert" th:text="${message}"></div>
+              <div th:if="${isLogin}" class="bg-green-100 text-blue-800 rounded px-4 py-3 mb-6" role="alert">
+                ログインしてください
+              </div>
 
               
               <form method="post" th:action="@{/login}">

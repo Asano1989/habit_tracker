@@ -4,7 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" th:href="@{/css/style.css}">
-  <title>新規登録</title>
+  <link rel="stylesheet" th:href="@{/css/output.css}">
+  <title>新規ユーザー登録 | The Pomo - 学習時間記録アプリ</title>
 </head>
 <script th:src="@{/js/menu.js}"></script>
 <body class="bg-[#f1efec] text-[#123458]">
@@ -36,7 +37,7 @@
           </div>
           
           <div class="mb-6">
-            <label for="password class="block text-[#123458] font-semibold">パスワード</label>
+            <label for="password" class="block text-[#123458] font-semibold">パスワード</label>
             <input 
               type="password" 
               class="w-full border border-[#d4c9be] rounded px-4 py-3 text-[#123458] bg-white focus:outline-none focus:border-[#123458] focus:ring-2 focus:ring-opacity-20 focus:ring-[#123458]" 
@@ -80,8 +81,7 @@
         </form>
         
         <div class="mt-6 text-center border-t border-[#d4c9be] pt-6">
-          <p class="mb-3 text-[#123458]">既にアカウントをお持ちですか？<a th:href="@{/login}" class="text-[#123458] font-semibold hover:underline">ログインはこちら</a></p>
-          <a th:href="@{/}" class="inline-block mt-3 text-[#123458] font-semibold hover:underline">トップ画面に戻る</a>
+          <p class="mb-3 text-[#123458]">既にアカウントをお持ちですか？<a th:href="@{/}" class="text-[#123458] font-semibold hover:underline">ログインはこちら</a></p>
         </div>
       </div>
     </div>

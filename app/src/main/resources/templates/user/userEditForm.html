@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" th:href="@{/css/style.css}">
   <link rel="stylesheet" th:href="@{/css/output.css}">
-  <title>プロフィール編集</title>
+  <title>ユーザー情報の編集 | The Pomo - 学習時間記録アプリ</title>
 </head>
 <script th:src="@{/js/menu.js}"></script>
 <body class="bg-[#f1efec] text-[#123458]">
@@ -13,10 +13,13 @@
   <!-- Header (with sidebar for authenticated users) -->
   <header th:replace="fragments/header :: header"></header>
 
+  <!-- User Menu Bar Fragment -->
+  <div th:replace="fragments/userMenu :: user-menu"></div>
+
   <main class="flex justify-center items-center min-h-[calc(100vh-80px)] py-8 px-4 bg-[#f1efec]">
     <div class="w-full max-w-md">
       <div class="bg-white rounded-lg shadow-md p-8">
-        <h2 class="text-2xl font-bold text-[#030303] text-center mb-6">プロフィール編集</h2>
+        <h2 class="text-2xl font-bold text-[#030303] text-center mb-6">ユーザー情報の編集</h2>
         
         <div th:if="${updateError}" class="bg-red-100 text-red-800 rounded px-4 py-3 mb-6" role="alert" th:text="${updateError}"></div>
         
