@@ -221,7 +221,7 @@ public class UserController {
 
         List<Record> recordList = recordService.findAllRecordsByUserRecent(loginUser);
         model.addAttribute("recordList", recordList);
-        model.addAttribute("userName", loginUser.getUser().getName());
+        model.addAttribute("userName", userForm.getName());
         model.addAttribute("updateSuccess", "ユーザー情報の更新が完了しました");
         return "user/userHome";
     }
