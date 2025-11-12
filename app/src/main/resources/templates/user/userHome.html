@@ -34,7 +34,7 @@
         <div th:each="record:${recordList}"
           class="group bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow p-4 border-l-4 border-[#123458]
             flex flex-col gap-4 md:grid md:grid-cols-[1fr_auto_auto_2fr] md:items-center min-h-16 cursor-pointer"
-          th:onclick="|window.location.href='@{/record/__${record.id}__}'|">
+          th:onclick="|window.location.href='@{/record/id/__${record.id}__}'|">
 
         <!-- Left -->
         <div class="flex items-center gap-4 min-w-0">

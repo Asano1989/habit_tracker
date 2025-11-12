@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" th:href="@{/css/output.css}">
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+  <title th:text="${title}">この日の学習記録 | The Pomo - 学習時間記録アプリ</title>
+<script th:src="@{/js/menu.js}"></script>
+</head>
+
+<body class="bg-[#f1efec] text-[#123458]">
+  <!-- Header Fragment -->
+  <div th:replace="fragments/header :: header"></div>
+
+  <!-- User Menu Fragment -->
+  <div th:replace="fragments/userMenu :: user-menu"></div>
+
+  <div>
+    <h1><span th:text="${#temporals.format(date, 'yyyy/MM/dd')}"></span>の学習記録</h1>
+  </div>
+  <div>
+    <table>
+      <tr>
+        <p>学習項目</p>
+        <ul th:each="subject:${lSubjectList}">
+          <li th:text="${subject.name}"></li>
+        </ul>
+      </tr>
+      <tr>
+        <td><p>合計学習時間</p><span th:text="${totalSumTime}"></span></td>
+      </tr>
+      <tr>
+        <td><p>合計ポモドーロ数</p><span th:text="${totalPomodoro}"></span></td>
+      </tr>
+    </table>
+  </div>
+
+  <div>
+    # <span th:text="${#temporals.format(date, 'yyyy/MM/dd（EEE）')}"></span><br/><br/>
+    ## 学習項目<br/>
+    <ul th:each="subject:${lSubjectList}">
+      <li> - <span th:text="${subject.name}"></span></li>
+    </ul>
+  </div>
+
+    <!-- Back Link -->
+    <div class="mt-8 text-center">
+      <a th:href="@{/record}" class="text-[#123458] font-medium hover:text-[#030303] transition-colors text-sm md:text-base">
+        ← 学習記録一覧に戻る
+      </a>
+    </div>
+  </div>
+</body>
+</html>

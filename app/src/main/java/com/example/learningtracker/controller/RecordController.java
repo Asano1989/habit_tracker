@@ -1,10 +1,14 @@
 package com.example.learningtracker.controller;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -16,10 +20,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.example.learningtracker.config.LoginUserDetailService;
 import com.example.learningtracker.config.LoginUserDetails;
 import com.example.learningtracker.entity.Record;
 import com.example.learningtracker.entity.User;
@@ -27,12 +29,11 @@ import com.example.learningtracker.form.RecordForm;
 import com.example.learningtracker.repository.RecordRepository;
 import com.example.learningtracker.service.LearningSubjectService;
 import com.example.learningtracker.service.RecordService;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @Controller
 public class RecordController {
-
-    @Autowired
-    private LoginUserDetailService loginUserDetailService;
 
     @Autowired
     private RecordRepository recordRepository;
@@ -94,7 +95,7 @@ public class RecordController {
         return "redirect:/record";
     }
 
-    @GetMapping("/record/{id}")
+    @GetMapping("/record/id/{id}")
     public ModelAndView recordById(@PathVariable(name="id") int id, @AuthenticationPrincipal LoginUserDetails loginUser, ModelAndView mv) {
         Record record = recordRepository.findById(id).get();
         User user = loginUser.getUser();
@@ -112,7 +113,7 @@ public class RecordController {
         return mv;
     }
 
-    @GetMapping("/record/{id}/edit")
+    @GetMapping("/record/id/{id}/edit")
     public ModelAndView getEditRecord(@PathVariable(name="id") int id, @AuthenticationPrincipal LoginUserDetails loginUser, ModelAndView mv) {
         Record record = recordRepository.findById(id).get();
         User user = loginUser.getUser();
@@ -129,7 +130,7 @@ public class RecordController {
         return mv;
     }
 
-    @PostMapping("/record/{id}/edit")
+    @PostMapping("/record/id/{id}/edit")
     public ModelAndView editRecord(@PathVariable(name="id") int id, @AuthenticationPrincipal LoginUserDetails loginUser, ModelAndView mv) {
         Record record = recordRepository.findById(id).get();
         User user = loginUser.getUser();
@@ -145,7 +146,7 @@ public class RecordController {
         return mv;
     }
 
-    @PostMapping("/record/{id}/update")
+    @PostMapping("/record/id/{id}/update")
     public String update(@AuthenticationPrincipal LoginUserDetails loginUser, @ModelAttribute @Validated RecordForm recordForm, BindingResult result, Model model) {
         // バリデーションエラーの場合
         if (result.hasErrors()) {
@@ -158,7 +159,7 @@ public class RecordController {
         return "redirect:/record";
     }
 
-    @PostMapping("/record/{id}/delete")
+    @PostMapping("/record/id/{id}/delete")
     public String delete(@PathVariable(name="id") int id, @AuthenticationPrincipal LoginUserDetails loginUser, @ModelAttribute @Validated RecordForm recordForm, BindingResult result, Model model) {
         Optional<Record> recordList = recordRepository.findById(id);
         Record record = recordList.get();
@@ -171,6 +172,18 @@ public class RecordController {
         model.addAttribute("record", record);
         model.addAttribute("userName", loginUser.getUser().getName());
         return "redirect:/record/{id}";
+    }
+
+    @GetMapping("/record/{date}")
+    public String getDate(@PathVariable("date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date, @AuthenticationPrincipal LoginUserDetails loginUser, Model model) {
+        List<Record> recordList = recordService.findAllRecordsByDate(loginUser, date);
+        String title = date.toString() + "の学習記録 | The Pomo - 学習時間記録アプリ";
+        model.addAttribute("title", title);
+        model.addAttribute("date", date);
+        model.addAttribute("totalSumTime", recordService.totalSumTime(recordList));
+        model.addAttribute("lSubjectList", recordService.lSubjectList(recordList));
+        model.addAttribute("totalPomodoro", recordService.totalPomodoro(recordList));
+        return "record/dairy";
     }
 
     @GetMapping("/everyone")

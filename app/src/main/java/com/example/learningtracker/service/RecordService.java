@@ -1,6 +1,11 @@
 package com.example.learningtracker.service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.temporal.ChronoField;
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +50,46 @@ public class RecordService {
         Integer userId = loginUser.getUser().getId();
         List<Record> userRecords = recordRepository.findByLearningSubject_User_IdOrderByCreatedAtDesc(userId);
         return userRecords;
+    }
+
+    public List<Record> findAllRecordsByDate(LoginUserDetails loginUser, LocalDate date) {
+        Integer userId = loginUser.getUser().getId();
+        List<Record> dateRecords = recordRepository.findByDateAndLearningSubject_User_Id(date, userId);
+        return dateRecords;
+    }
+
+    public LocalTime totalSumTime(List<Record> recordList) {
+        LocalTime total = LocalTime.of(0, 0);
+        if(recordList.size() > 0) {
+            for(Record record : recordList) {
+                long time = record.getSumTime().getLong(ChronoField.MINUTE_OF_DAY);
+                total = total.plusMinutes(time);
+            }
+        }
+        return total;
+    }
+
+    public List<LearningSubject> lSubjectList(List<Record> recordList) {
+        List<LearningSubject> lSubjectList = new ArrayList<>();
+        if(recordList.size() > 0) {
+            for(Record record : recordList) {
+                lSubjectList.add(record.getLearningSubject());
+            }
+            lSubjectList = new ArrayList<LearningSubject>(new LinkedHashSet<>(lSubjectList));
+        }
+        return lSubjectList;
+    }
+
+    public Integer totalPomodoro(List<Record> recordList) {
+        Integer total = 0;
+        if(recordList.size() > 0) {
+            for(Record record : recordList) {
+                if(record.getUsesPomodoro()) {
+                    total =+ record.getPomodoro();
+                }
+            }
+        }
+        return total;
     }
 
     public void update(RecordForm form, @AuthenticationPrincipal LoginUserDetails loginUser) {

@@ -5,9 +5,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 import com.example.learningtracker.entity.LearningSubject;
-import com.example.learningtracker.entity.User;
 
-import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
