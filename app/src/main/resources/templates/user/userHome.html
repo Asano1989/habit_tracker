@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" th:href="@{/css/output.css}">
   <link rel="stylesheet" th:href="@{/css/style.css}">
+  <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.14/index.global.min.js'></script>
+  <script th:src="@{/js/calendar.js}"></script>
   <title>ユーザーホーム | The Pomo - 学習時間記録アプリ</title>
 </head>
 <script th:src="@{/js/menu.js}"></script>
@@ -15,6 +17,8 @@
 
   <!-- User Menu Bar Fragment -->
   <div th:replace="fragments/userMenu :: user-menu"></div>
+
+  <div id="calendar"></div>
 
   <!-- Main Content -->
   <div class="max-w-7xl mx-auto px-4 md:px-6 py-8 md:py-10 bg-[#f1efec]">
