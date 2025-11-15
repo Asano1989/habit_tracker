@@ -28,6 +28,10 @@
         <table class="w-full border-collapse">
           <thead>
             <tr class="border-b border-[#d4c9be] transition-colors">
+              <th class="px-4 md:px-6 py-4 bg-[#d4c9be] font-semibold text-[#030303] text-sm md:text-base border-r border-[#d4c9be] w-1/4 md:w-1/5">学習記録件数</th>
+              <td class="px-4 md:px-6 py-4 text-[#123458] text-sm md:text-base"><span th:text="${count}"></span>件</td>
+            </tr>
+            <tr class="border-b border-[#d4c9be] transition-colors">
               <th class="px-4 md:px-6 py-4 bg-[#d4c9be] font-semibold text-[#030303] text-sm md:text-base border-r border-[#d4c9be] w-1/4 md:w-1/5">学習項目</th>
               <td class="px-4 md:px-6 py-4 text-[#123458] text-sm md:text-base">
                 <ul th:each="subject:${lSubjectList}" class="list-disc list-inside space-y-1">

@@ -176,6 +176,7 @@ public class RecordController {
         String title = date.toString() + "の学習記録 | The Pomo - 学習時間記録アプリ";
         model.addAttribute("title", title);
         model.addAttribute("date", date);
+        model.addAttribute("count", recordService.dairyCount(recordList));
         model.addAttribute("totalSumTime", recordService.totalSumTime(recordList));
         model.addAttribute("lSubjectList", recordService.lSubjectList(recordList));
         model.addAttribute("totalPomodoro", recordService.totalPomodoro(recordList));

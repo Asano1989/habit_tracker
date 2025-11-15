@@ -16,73 +16,46 @@
   <!-- User Menu Bar Fragment -->
   <div th:replace="fragments/userMenu :: user-menu"></div>
 
-  <div id="calendar"></div>
-
-  <!-- Main Content -->
   <div class="max-w-7xl mx-auto px-4 md:px-6 py-8 md:py-10 bg-[#f1efec]">
-    <!-- Success Alert -->
-    <div th:if="${updateSuccess}" class="bg-green-100 text-green-800 rounded px-4 py-3 mb-8" role="alert" th:text="${updateSuccess}"></div>
-
-    <!-- Records Section with improved card design -->
-    <div class="mb-12">
-      <h2 class="text-2xl md:text-3xl font-bold text-[#030303] mb-6"><span th:text="${userName}"></span>さんの最近の学習記録</h2>
-      
-      <!-- Convert table to stacked card layout -->
-      <div class="space-y-3">
-        <div th:if="${#lists.isEmpty(recordList)}" class="text-center py-8 text-[#123458]">
-          <p class="text-lg font-medium">学習記録がまだ登録されていません</p>
-        </div>
-        
-        <div th:each="record:${recordList}"
-          class="group bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow p-4 border-l-4 border-[#123458]
-            flex flex-col gap-4 md:grid md:grid-cols-[1fr_auto_auto_2fr] md:items-center min-h-16 cursor-pointer"
-          th:onclick="|window.location.href='@{/record/id/__${record.id}__}'|">
-
-        <!-- Left -->
-        <div class="flex items-center gap-4 min-w-0">
-          <i class="i-mdi-clock-edit-outline text-[#123458]"></i>
-          <div class="min-w-0">
-            <p class="text-xs text-[#d4c9be] font-medium">#<span th:text="${record.id}"></span></p>
-            <div class="flex items-center gap-2 min-w-0">
-              <p class="font-semibold text-[#030303]" th:text="${#temporals.format(record.date, 'yyyy/MM/dd')}"></p>
-              <span class="text-[#d4c9be]">•</span>
-              <p class="font-semibold text-[#030303] truncate" th:text="${record.learningSubject.name}"></p>
-            </div>
-          </div>
-        </div>
-
-        <!-- 学習時間 -->
-        <div class="text-center flex flex-col items-center w-28 md:w-32 flex-shrink-0">
-          <p class="text-xs text-[#d4c9be] font-medium uppercase">学習時間</p>
-          <p class="text-lg md:text-xl font-bold text-[#123458]" th:text="${#temporals.format(record.sumTime, 'HH:mm')}"></p>
-        </div>
-
-        <!-- ポモドーロ -->
-        <div class="text-center flex flex-col items-center w-20 md:w-28 flex-shrink-0">
-          <p class="text-xs text-[#d4c9be] font-medium uppercase">ポモドーロ</p>
-          <p class="text-lg md:text-xl font-bold text-[#123458]" th:text="${record.usesPomodoro ? record.pomodoro : '－'}"></p>
-        </div>
-
-        <!-- 右：メモ / 公開 / 編集 -->
-        <div class="flex items-center gap-3 justify-end min-w-0">
-          <div class="text-xs text-[#123458] truncate max-w-[14rem] md:max-w-full" th:if="${record.memo}">
-            <span th:text="${record.memo}"></span>
-          </div>
-
-          <span class="px-2 py-1 text-xs font-medium rounded whitespace-nowrap flex-shrink-0"
-                th:classappend="${record.isPublished ? 'bg-[#d4c9be] text-[#030303]' : 'bg-[#f1efec] border border-[#d4c9be] text-[#123458]'}"
-                th:text="${record.isPublished ? '公開' : '非公開'}"></span>
-
-          
-        </div>
-
-      </div>
-    </div>
+    <div id="calendar"></div>
   </div>
 
   <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.19/index.global.min.js'></script>
   <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.19/locales-all.global.min.js'></script>
-  <script th:src="@{/js/calendar.js}"></script>
+  <script th:inline="javascript">
+    document.addEventListener('DOMContentLoaded', function() {
+      var calendarEl = document.getElementById('calendar');
+      var calendar = new FullCalendar.Calendar(calendarEl, {
+        plugins: [ ],
+        customButtons: {
+          newRecord: {
+            text: '新規登録',
+            click: function() {
+              const url = /*[[@{/record/create/form}]]*/ '';
+              window.location.href = url;
+            }
+          }
+        },
+        headerToolbar: {
+          start: 'prev,today,next',
+          center: 'title',
+          end: 'dayGridMonth,listYear newRecord'
+        },
+        buttonText: {
+            today: '今月',
+            month: '月カレンダー',
+            list: '年間リスト'
+          },
+        events: '/api/daily-records',
+        locale: 'ja',
+        selectable: true,
+        businessHours: true,
+        contentHeight: "auto",
+        initialView: 'dayGridMonth'
+      });
+        calendar.render();
+    });
+  </script>
 </body>
 </html>
 

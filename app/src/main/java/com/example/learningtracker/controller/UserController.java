@@ -1,10 +1,12 @@
 package com.example.learningtracker.controller;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -16,6 +18,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -239,19 +242,20 @@ public class UserController {
     }
 
     @GetMapping("/home")
-    public ModelAndView home(@AuthenticationPrincipal LoginUserDetails loginUser, Model model, ModelAndView mav) {
+    public ModelAndView home(@PathVariable("date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date, @AuthenticationPrincipal LoginUserDetails loginUser, Model model, ModelAndView mv) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.isAuthenticated() && !(authentication.getPrincipal() instanceof String)) {
             List<Record> recordList = recordService.findAllRecordsByUserRecent(loginUser);
             model.addAttribute("recordList", recordList);
             model.addAttribute("userName", loginUser.getUser().getName());
+            model.addAttribute("targetDate", date);
 
-            mav.setViewName("user/userHome");
-            return mav;
+            mv.setViewName("user/userHome");
+            return mv;
         } else {
             model.addAttribute("isLogin", "ログインしてください");
-            mav.setViewName("home");
-            return mav;
+            mv.setViewName("home");
+            return mv;
         }
     }
 }

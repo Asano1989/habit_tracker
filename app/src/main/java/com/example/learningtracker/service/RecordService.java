@@ -58,6 +58,16 @@ public class RecordService {
         return dateRecords;
     }
 
+    public Integer dairyCount(List<Record> recordList) {
+        Integer count = 0;
+        if(recordList.size() > 0) {
+            for(Record record : recordList) {
+                count += 1;
+            }
+        }
+        return count;
+    }
+
     public LocalTime totalSumTime(List<Record> recordList) {
         LocalTime total = LocalTime.of(0, 0);
         if(recordList.size() > 0) {
