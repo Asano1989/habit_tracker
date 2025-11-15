@@ -242,13 +242,12 @@ public class UserController {
     }
 
     @GetMapping("/home")
-    public ModelAndView home(@PathVariable("date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date, @AuthenticationPrincipal LoginUserDetails loginUser, Model model, ModelAndView mv) {
+    public ModelAndView home(@AuthenticationPrincipal LoginUserDetails loginUser, Model model, ModelAndView mv) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.isAuthenticated() && !(authentication.getPrincipal() instanceof String)) {
             List<Record> recordList = recordService.findAllRecordsByUserRecent(loginUser);
             model.addAttribute("recordList", recordList);
             model.addAttribute("userName", loginUser.getUser().getName());
-            model.addAttribute("targetDate", date);
 
             mv.setViewName("user/userHome");
             return mv;
