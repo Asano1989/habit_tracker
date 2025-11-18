@@ -92,3 +92,4 @@ postgres_data_dev/
 # ==============================
 app/src/main/java/com/example/learningtracker/todolist
 app/src/main/resources/static/css/output.css
+init-scripts/
