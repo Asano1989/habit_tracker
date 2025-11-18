@@ -15,8 +15,8 @@
 <script th:src="@{/js/menu.js}"></script>
 <body class="bg-[#f1efec] text-[#123458]">
   <!-- Converted to Tailwind CSS -->
-  <!-- Header Fragment -->
-  <div th:replace="fragments/header :: header"></div>
+    <!-- Header Fragment -->
+  <div th:replace="~{fragments/header :: header}"></div>
 
   <main class="flex-1">
     <div th:unless="${loggedin}" class="w-full">
