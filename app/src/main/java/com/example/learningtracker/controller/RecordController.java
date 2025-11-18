@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.learningtracker.config.LoginUserDetails;
 import com.example.learningtracker.entity.Record;
@@ -95,7 +97,7 @@ public class RecordController {
     public ModelAndView recordById(@PathVariable(name="id") int id, @AuthenticationPrincipal LoginUserDetails loginUser, ModelAndView mv) {
         Record record = recordRepository.findById(id).get();
         User user = loginUser.getUser();
-        if (record.getLearningSubject().getUser().getId() == user.getId()) {
+        if (record.getLearningSubject().getUser().getId() .equals(user.getId())) {
             mv.addObject("record", record);
             mv.addObject("userName", user.getName());
             mv.setViewName("record/detail");
@@ -114,7 +116,7 @@ public class RecordController {
         Record record = recordRepository.findById(id).get();
         User user = loginUser.getUser();
 
-        if (record.getLearningSubject().getUser().getId() == user.getId()) {
+        if (record.getLearningSubject().getUser().getId().equals(user.getId())) {
             mv.addObject("record", record);
             mv.addObject("userName", user.getName());
             mv.addObject("lSubject", learningSubjectService.findAllByUserId(loginUser));
@@ -130,7 +132,7 @@ public class RecordController {
     public ModelAndView editRecord(@PathVariable(name="id") int id, @AuthenticationPrincipal LoginUserDetails loginUser, ModelAndView mv) {
         Record record = recordRepository.findById(id).get();
         User user = loginUser.getUser();
-        if (record.getLearningSubject().getUser().getId() == user.getId()) {
+        if (record.getLearningSubject().getUser().getId().equals(user.getId())) {
             mv.addObject("record", record);
             mv.addObject("userName", user.getName());
             mv.addObject("lSubject", learningSubjectService.findAllByUserId(loginUser));
@@ -143,7 +145,7 @@ public class RecordController {
     }
 
     @PostMapping("/record/id/{id}/update")
-    public String update(@AuthenticationPrincipal LoginUserDetails loginUser, @ModelAttribute @Validated RecordForm recordForm, BindingResult result, Model model) {
+    public String update(@AuthenticationPrincipal LoginUserDetails loginUser, @ModelAttribute @Validated RecordForm recordForm, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
         // バリデーションエラーの場合
         if (result.hasErrors()) {
             model.addAttribute("recordForm", recordForm);
@@ -151,23 +153,35 @@ public class RecordController {
             return "record/recordEditForm";
         }
 
-        recordService.update(recordForm, loginUser);
+        try {
+            recordService.update(recordForm, loginUser);
+            redirectAttributes.addFlashAttribute("successMessage", "学習記録が正常に更新されました。");
+        } catch (EmptyResultDataAccessException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "指定された学習記録が見つかりませんでした。");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "学習記録の更新に失敗しました。");
+        }
+
         return "redirect:/record";
     }
 
     @PostMapping("/record/id/{id}/delete")
-    public String delete(@PathVariable(name="id") int id, @AuthenticationPrincipal LoginUserDetails loginUser, @ModelAttribute @Validated RecordForm recordForm, BindingResult result, Model model) {
-        Optional<Record> recordList = recordRepository.findById(id);
-        Record record = recordList.get();
+    public String delete(@PathVariable(name="id") int id, @AuthenticationPrincipal LoginUserDetails loginUser, @ModelAttribute @Validated RecordForm recordForm, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
+        Optional<Record> records = recordRepository.findById(id);
+        Record record = records.get();
 
-        if (loginUser.getUser().getId() == record.getLearningSubject().getUser().getId()) {
-            recordRepository.deleteById(record.getId());
+        // if (loginUser.getUser().getId().equals(record.getLearningSubject().getUser().getId())) {
+            try {
+                recordRepository.deleteById(record.getId());
+                redirectAttributes.addFlashAttribute("successMessage", "学習記録が正常に削除されました。");
+            } catch (EmptyResultDataAccessException e) {
+                redirectAttributes.addFlashAttribute("errorMessage", "指定された学習記録が見つかりませんでした。");
+            } catch (Exception e) {
+                redirectAttributes.addFlashAttribute("errorMessage", "学習記録の削除に失敗しました。");
+            }
             return "redirect:/record";
-        }
-
-        model.addAttribute("record", record);
-        model.addAttribute("userName", loginUser.getUser().getName());
-        return "redirect:/record/{id}";
+        //}
+        //    return "/record/id/{id}";
     }
 
     @GetMapping("/record/{date}")

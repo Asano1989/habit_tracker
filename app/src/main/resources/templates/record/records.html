@@ -18,8 +18,15 @@
 
   <!-- Main Content -->
   <div class="max-w-7xl mx-auto px-4 md:px-6 py-8 md:py-10 bg-[#f1efec]">
-    <!-- Success Alert -->
-    <div th:if="${updateSuccess}" class="bg-green-100 text-green-800 rounded px-4 py-3 mb-8" role="alert" th:text="${updateSuccess}"></div>
+    <!-- Success Message Alert -->
+    <div th:if="${successMessage}" class="bg-green-50 border-l-4 border-green-500 text-green-700 rounded px-4 py-3 mb-6" role="alert">
+      <p th:text="${successMessage}" class="font-medium"></p>
+    </div>
+
+    <!-- Error Message Alert -->
+    <div th:if="${errorMessage}" class="bg-red-50 border-l-4 border-red-500 text-red-700 rounded px-4 py-3 mb-6" role="alert">
+      <p th:text="${errorMessage}" class="font-medium"></p>
+    </div>
 
     <!-- Records Section with improved card design -->
     <div class="mb-12">

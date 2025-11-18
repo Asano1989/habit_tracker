@@ -130,13 +130,13 @@
           </button>
           <button 
             type="submit" 
-            th:formaction="@{/record/__${record.id}__/update}" 
+            th:formaction="@{/record/id/__${record.id}__/update}" 
             class="flex-1 bg-[#123458] hover:bg-[#0d1f36] text-white font-semibold py-3 px-6 rounded-lg transition-colors">
             更新
           </button>
           <button 
             type="submit" 
-            th:formaction="@{/record/__${record.id}__/delete}" 
+            th:formaction="@{/record/id/__${record.id}__/delete}" 
             class="flex-1 bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors"
             onclick="return confirm('学習記録を削除します。\n本当に削除しますか？');">
             削除

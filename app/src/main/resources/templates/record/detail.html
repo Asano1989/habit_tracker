@@ -101,7 +101,7 @@
                   </button>
                 </form>
                 <!-- Delete Button -->
-                <form method="post" th:formaction="@{/record/id/__${record.id}__/delete}" class="flex-1 sm:flex-none">
+                <form method="post" th:action="@{/record/id/__${record.id}__/delete}" class="flex-1 sm:flex-none">
                   <button type="submit" class="w-full sm:w-auto px-6 py-2 bg-red-500 text-white font-semibold text-sm md:text-base rounded-lg transition-all hover:bg-red-700 shadow-sm hover:shadow-md" onclick="return confirm('学習記録を削除します。\n本当に削除しますか？');">
                     削除
                   </button>
