@@ -54,11 +54,10 @@
         <div class="flex items-center gap-4 min-w-0">
           <i class="i-mdi-clock-edit-outline text-[#123458]"></i>
           <div class="min-w-0">
-            <p class="text-xs text-[#d4c9be] font-medium">#<span th:text="${record.id}"></span></p>
+            <p class="text-s text-[#d4c9be] font-medium"><a th:href="@{record/__${#temporals.format(record.date, 'yyyy-MM-dd')}__}"><span th:text="${#temporals.format(record.date, 'yyyy/MM/dd')}"></span></a></p>
             <div class="flex items-center gap-2 min-w-0">
-              <a th:href="@{record/__${#temporals.format(record.date, 'yyyy-MM-dd')}__}"><p class="font-semibold text-[#030303]" th:text="${#temporals.format(record.date, 'yyyy/MM/dd')}"></p></a>
-              <span class="text-[#d4c9be]">•</span>
-              <p class="font-semibold text-[#030303] truncate" th:text="${record.learningSubject.name}"></p>
+              
+              <span class="text-[#d4c9be]">•</span><p class="font-semibold text-[#030303] truncate" th:text="${record.learningSubject.name}"></p>
             </div>
           </div>
         </div>
