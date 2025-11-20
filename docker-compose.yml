@@ -1,104 +1,13 @@
 version: '3.8'
 
 services:
-  # 1. Spring Bootアプリケーションサービス
   app:
     build:
       context: .
       dockerfile: Dockerfile
     image: my-spring-app:latest
-    depends_on:
-      roach_init:
-        condition: service_completed_successfully
     ports:
       - "8080:8080"
     environment:
       SPRING_PROFILES_ACTIVE: prod
-      SPRING_DATASOURCE_URL: >-
-        jdbc:postgresql://asano1989-18585.j77.aws-ap-southeast-1.cockroachlabs.cloud:26257/defaultdb?
-        sslmode=verify-full
-        &sslrootcert=/usr/local/certs/ca.crt
-        &sslcert=/usr/local/certs/client.postgre.crt
-        &sslkey=/usr/local/certs/client.postgre.key
-      SPRING_DATASOURCE_PROPERTIES_SSLROOTCERT: ${SSL_ROOT_CERT}
-      SPRING_DATASOURCE_PROPERTIES_SSLCERT: ${SSL_CLIENT_CERT}
-      SPRING_DATASOURCE_PROPERTIES_SSLKEY: ${SSL_CLIENT_KEY}
-      SPRING_DATASOURCE_USERNAME: ${DB_USER}
-      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
-
-      
-  # 2. 証明書展開サービス (cert-generatorステージで生成された証明書を共有ボリュームに展開)
-  cert_copier:
-    image: my-spring-app:latest
-    container_name: cert_copier
-    entrypoint: /bin/sh -c
-    command: >
-      "
-      mkdir -p /certs &&
-      
-      cp /usr/local/certs/ca.crt /certs/ca.crt &&
-      cp /usr/local/certs/client.postgre.crt /certs/client.postgre.crt &&
-      cp /usr/local/certs/client.postgre.key /certs/client.postgre.key &&
-      
-      cp /usr/local/certs/node.crt /certs/node.crt &&
-      cp /usr/local/certs/node.key /certs/node.key &&
-      
-      cp /usr/local/certs/client.root.crt /certs/client.root.crt &&
-      cp /usr/local/certs/client.root.key /certs/client.root.key &&
-
-      echo '証明書を共有ボリュームに展開完了';
-      "
-    volumes:
-      - certs:/certs
-    restart: 'no'
-
-  # 3. CockroachDB ノードサービス
-  roach1:
-    image: cockroachdb/cockroach:latest
-    container_name: roach_node1
-    depends_on:
-      cert_copier:
-        condition: service_completed_successfully
-    entrypoint: "/cockroach/cockroach"
-    command:
-      - start
-      - --certs-dir=/certs
-      - --store=/cockroach/data
-      - --listen-addr=0.0.0.0
-      - --advertise-addr=roach1
-      - --join=roach1
-      - --logtostderr=INFO
-      - --cache=25%
-      - --max-sql-memory=25%
-    ports:
-      - "26257:26257" # JDBC接続用
-      - "8081:8080"   # Admin UI用
-    volumes:
-      - certs:/certs:ro
-      - roach_data:/cockroach/data
-    healthcheck:
-      test: ["CMD", "/cockroach/cockroach", "sql", "--certs-dir=/certs", "--host=roach1", "-e", "SELECT 1"]
-      interval: 5s
-      timeout: 10s
-      retries: 5
-      start_period: 60s
-
-  # 4. クラスタ初期化サービス
-  roach_init:
-    image: cockroachdb/cockroach:latest
-    container_name: roach_init
-    depends_on:
-      roach1:
-        condition: service_started
-    command:
-      - init
-      - --certs-dir=/certs
-      - --host=roach1
-      - --user=root
-    volumes:
-      - certs:/certs:ro
-    restart: "no"
-
-volumes:
-  certs:
-  roach_data:
+      SPRING_DATASOURCE_URL: ${JDBC_DATABASE_URL}
