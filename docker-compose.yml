@@ -1,43 +1,66 @@
 version: '3.8'
+
 services:
+  # 1. Spring Bootアプリケーションサービス
   app:
+    # Dockerfileで証明書が埋め込まれているため、証明書関連のボリュームマウントは不要
     build:
       context: .
       dockerfile: Dockerfile
+    image: my-spring-app:latest
+    # roach_initが完了し、データベースが初期化されるのを待つ
     depends_on:
       roach_init:
         condition: service_completed_successfully
     ports:
       - "8080:8080"
-    volumes:
-      - certs:/usr/local/certs:ro
     environment:
       SPRING_PROFILES_ACTIVE: prod
-      SPRING_DATASOURCE_URL: jdbc:postgresql://roach1:26257/defaultdb?sslmode=verify-full&sslrootcert=/usr/local/certs/ca.crt&sslcert=/usr/local/certs/client.postgre.crt&sslkey=/usr/local/certs/client.postgre.key
-      SPRING_DATASOURCE_USERNAME: ${DB_USER}
+      # SPRING_DATASOURCE_URL: jdbc:postgresql://roach1:26257/defaultdb?sslmode=verify-full&sslrootcert=/usr/local/certs/ca.crt&sslcert=/usr/local/certs/client.postgre.crt&sslkey=/usr/local/certs/client.postgre.key
+      SPRING_DATASOURCE_URL: >-
+        jdbc:postgresql://asano1989-18585.j77.aws-ap-southeast-1.cockroachlabs.cloud:26257/defaultdb?
+        sslmode=verify-full
+        &sslrootcert=/usr/local/certs/ca.crt
+        &sslcert=/usr/local/certs/client.postgre.crt
+        &sslkey=/usr/local/certs/client.postgre.key
+      SPRING_DATASOURCE_USERNAME: postgre
       SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
-
-  cert_gen:
-    image: cockroachdb/cockroach:latest
-    container_name: cert_generator
-    entrypoint: /bin/bash
+      #JAVA_TOOL_OPTIONS: >-
+      #  -Djavax.net.ssl.trustStore=/opt/java/openjdk/lib/security/cacerts
+      #  -Djavax.net.ssl.trustStorePassword=changeit
+      
+  # 2. 証明書展開サービス (cert-generatorステージで生成された証明書を共有ボリュームに展開)
+  cert_copier:
+    image: my-spring-app:latest
+    container_name: cert_copier
+    entrypoint: /bin/sh -c # スクリプト実行用
     command: >
-      -c "
-      cockroach cert create-ca --certs-dir=/certs --ca-key=/certs/ca.key;
-      cockroach cert create-node roach1 localhost 127.0.0.1 --certs-dir=/certs --ca-key=/certs/ca.key;
-      cockroach cert create-client postgre --certs-dir=/certs --ca-key=/certs/ca.key;
-      cockroach cert create-client root --certs-dir=/certs --ca-key=/certs/ca.key;
-      echo '証明書生成完了！';
+      "
+      mkdir -p /certs &&
+      
+      cp /usr/local/certs/ca.crt /certs/ca.crt &&
+      cp /usr/local/certs/client.postgre.crt /certs/client.postgre.crt &&
+      cp /usr/local/certs/client.postgre.key /certs/client.postgre.key &&
+      
+      cp /usr/local/certs/node.crt /certs/node.crt &&
+      cp /usr/local/certs/node.key /certs/node.key &&
+      
+      cp /usr/local/certs/client.root.crt /certs/client.root.crt &&
+      cp /usr/local/certs/client.root.key /certs/client.root.key &&
+
+      echo '証明書を共有ボリュームに展開完了';
       "
     volumes:
       - certs:/certs
     restart: 'no'
 
+  # 3. CockroachDB ノードサービス
   roach1:
     image: cockroachdb/cockroach:latest
     container_name: roach_node1
+    # cert_copierが証明書をボリュームにコピーし終わるのを待つ
     depends_on:
-      cert_gen:
+      cert_copier:
         condition: service_completed_successfully
     entrypoint: "/cockroach/cockroach"
     command:
@@ -52,9 +75,9 @@ services:
       - --max-sql-memory=25%
     ports:
       - "26257:26257" # JDBC接続用
-      - "8081:8080"
+      - "8081:8080"   # Admin UI用
     volumes:
-      - certs:/certs:ro # 証明書を読み取り専用でマウント
+      - certs:/certs:ro # 共有ボリュームから証明書を読み取り専用でマウント
       - roach_data:/cockroach/data
     healthcheck:
       test: ["CMD", "/cockroach/cockroach", "sql", "--certs-dir=/certs", "--host=roach1", "-e", "SELECT 1"]
@@ -63,9 +86,11 @@ services:
       retries: 5
       start_period: 60s
 
+  # 4. クラスタ初期化サービス
   roach_init:
     image: cockroachdb/cockroach:latest
     container_name: roach_init
+    # roach1ノードが起動するのを待つ (service_healthyではないことに注意)
     depends_on:
       roach1:
         condition: service_started
@@ -78,6 +103,7 @@ services:
       - certs:/certs:ro
     restart: "no"
 
+# 永続化と共有のためのボリューム定義
 volumes:
   certs:
   roach_data:
