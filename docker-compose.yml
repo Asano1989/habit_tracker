@@ -14,7 +14,15 @@ services:
       - "8080:8080"
     environment:
       SPRING_PROFILES_ACTIVE: prod
-      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
+      SPRING_DATASOURCE_URL: >-
+        jdbc:postgresql://asano1989-18585.j77.aws-ap-southeast-1.cockroachlabs.cloud:26257/defaultdb?
+        sslmode=verify-full
+        &sslrootcert=/usr/local/certs/ca.crt
+        &sslcert=/usr/local/certs/client.postgre.crt
+        &sslkey=/usr/local/certs/client.postgre.key
+      SPRING_DATASOURCE_PROPERTIES_SSLROOTCERT: ${SSL_ROOT_CERT}
+      SPRING_DATASOURCE_PROPERTIES_SSLCERT: ${SSL_CLIENT_CERT}
+      SPRING_DATASOURCE_PROPERTIES_SSLKEY: ${SSL_CLIENT_KEY}
       SPRING_DATASOURCE_USERNAME: ${DB_USER}
       SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
 

@@ -57,13 +57,11 @@ COPY --from=cert-generator /certs/client.postgre.key /usr/local/certs/client.pos
 COPY --from=cert-generator /certs/node.crt /usr/local/certs/node.crt
 COPY --from=cert-generator /certs/node.key /usr/local/certs/node.key
 
-# Javaの信頼ストアにCA証明書をインポート
-#RUN keytool -import \
-#    -file /usr/local/certs/ca.crt \
-#    -alias cockroach-ca \
-#    -keystore $JAVA_HOME/lib/security/cacerts \
-#    -storepass changeit \
-#    -noprompt
+# JDBCドライバがデフォルトで探すディレクトリを作成
+RUN mkdir -p /root/.postgresql/
+
+# ルート証明書 (ca.crt) をドライバが期待するファイル名 (root.crt) でコピー
+RUN cp /usr/local/certs/ca.crt /root/.postgresql/root.crt
 
 EXPOSE 8080
 ENTRYPOINT ["java","-jar","app.jar"]
