@@ -4,10 +4,80 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    depends_on:
+      roach_init:
+        condition: service_completed_successfully
     ports:
       - "8080:8080"
+    volumes:
+      - certs:/usr/local/certs:ro
     environment:
       SPRING_PROFILES_ACTIVE: prod
-      SPRING_DATASOURCE_URL: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}
+      SPRING_DATASOURCE_URL: jdbc:postgresql://roach1:26257/defaultdb?sslmode=verify-full&sslrootcert=/usr/local/certs/ca.crt&sslcert=/usr/local/certs/client.postgre.crt&sslkey=/usr/local/certs/client.postgre.key
       SPRING_DATASOURCE_USERNAME: ${DB_USER}
       SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
+
+  cert_gen:
+    image: cockroachdb/cockroach:latest
+    container_name: cert_generator
+    entrypoint: /bin/bash
+    command: >
+      -c "
+      cockroach cert create-ca --certs-dir=/certs --ca-key=/certs/ca.key;
+      cockroach cert create-node roach1 localhost 127.0.0.1 --certs-dir=/certs --ca-key=/certs/ca.key;
+      cockroach cert create-client postgre --certs-dir=/certs --ca-key=/certs/ca.key;
+      cockroach cert create-client root --certs-dir=/certs --ca-key=/certs/ca.key;
+      echo '証明書生成完了！';
+      "
+    volumes:
+      - certs:/certs
+    restart: 'no'
+
+  roach1:
+    image: cockroachdb/cockroach:latest
+    container_name: roach_node1
+    depends_on:
+      cert_gen:
+        condition: service_completed_successfully
+    entrypoint: "/cockroach/cockroach"
+    command:
+      - start
+      - --certs-dir=/certs
+      - --store=/cockroach/data
+      - --listen-addr=0.0.0.0
+      - --advertise-addr=roach1
+      - --join=roach1
+      - --logtostderr=INFO
+      - --cache=25%
+      - --max-sql-memory=25%
+    ports:
+      - "26257:26257" # JDBC接続用
+      - "8081:8080"
+    volumes:
+      - certs:/certs:ro # 証明書を読み取り専用でマウント
+      - roach_data:/cockroach/data
+    healthcheck:
+      test: ["CMD", "/cockroach/cockroach", "sql", "--certs-dir=/certs", "--host=roach1", "-e", "SELECT 1"]
+      interval: 5s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+
+  roach_init:
+    image: cockroachdb/cockroach:latest
+    container_name: roach_init
+    depends_on:
+      roach1:
+        condition: service_started
+    command:
+      - init
+      - --certs-dir=/certs
+      - --host=roach1
+      - --user=root
+    volumes:
+      - certs:/certs:ro
+    restart: "no"
+
+volumes:
+  certs:
+  roach_data:
