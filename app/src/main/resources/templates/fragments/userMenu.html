@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8">
+  <meta property="og:url" content="https://the-pomo.asnpp.com/" />
+  <meta property="og:title" content="The Pomo - 学習時間記録アプリ" />
+  <meta property="og:site_name" content="The Pomo - 学習時間記録アプリ" />
+  <meta property="og:type" content="article" />
+  <meta property="og:image" content="https://the-pomo.asnpp.com/image/ThePomoOgp.png" />
+</head>
+<body>
+
+<!-- Menu Bar for Desktop -->
+<nav th:fragment="user-menu" class="user-menu-bar hidden md:block bg-white border-b-2 border-[#d4c9be] p-0 m-0" sec:authorize="isAuthenticated()">
+  <div class="user-menu-container flex flex-wrap gap-0 max-w-7xl mx-auto p-0">
+    <div class="user-menu-link flex-1 border-r border-[#d4c9be] p-0 m-0">
+      <a th:href="@{/record/create/form}" class="user-menu-item block px-6 py-4 text-[#123458] no-underline font-medium text-center transition-all hover:bg-[#d4c9be] hover:text-[#123458]">新しい記録を登録</a>
+    </div>
+    <div class="user-menu-link flex-1 border-r border-[#d4c9be]p-0 m-0">
+      <a th:href="@{/record}" class="user-menu-item block px-6 py-4 text-[#123458] no-underline font-medium text-center transition-all hover:bg-[#d4c9be] hover:text-[#123458]">学習の記録一覧</a>
+    </div>
+    <div class="user-menu-link flex-1 border-r border-[#d4c9be] p-0 m-0">
+      <a th:href="@{/subject}" class="user-menu-item block px-6 py-4 text-[#123458] no-underline font-medium text-center transition-all hover:bg-[#d4c9be] hover:text-[#123458]">学習の項目一覧</a>
+    </div>
+    <div class="user-menu-link flex-1 border-r border-[#d4c9be] p-0 m-0">
+      <a th:href="@{/user}" class="user-menu-item block px-6 py-4 text-[#123458] no-underline font-medium text-center transition-all hover:bg-[#d4c9be] hover:text-[#123458]">ユーザー情報</a>
+    </div>
+    <div class="user-menu-link flex-1 p-0 m-0">
+      <a th:href="@{/everyone}" class="user-menu-item block px-6 py-4 text-[#123458] no-underline font-medium text-center transition-all hover:bg-[#d4c9be] hover:text-[#123458]">みんなの記録</a>
+    </div>
+  </div>
+</nav>
+
+</body>
+</html>

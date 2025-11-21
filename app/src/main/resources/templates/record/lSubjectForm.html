@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" th:href="@{/css/output.css}">
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+  <title>学習項目のフォーム | The Pomo - 学習時間記録アプリ</title>
+</head>
+<script th:src="@{/js/menu.js}"></script>
+<body class="bg-[#f1efec] text-[#123458]">
+  <!-- Header Fragment -->
+  <div th:replace="~{fragments/header :: header}"></div>
+
+  <!-- User Menu Bar Fragment -->
+  <div th:replace="~{fragments/userMenu :: user-menu}"></div>
+
+  <!-- Main Content -->
+  <div class="max-w-2xl mx-auto px-4 md:px-6 py-8 md:py-10">
+    <!-- Page Header -->
+    <h1 class="text-3xl md:text-4xl font-bold text-[#030303] mb-2">
+      <span th:if="${session.mode == 'update'}">学習項目の編集</span>
+      <span th:unless="${session.mode == 'update'}">学習項目の新規登録</span>
+    </h1>
+    <p class="text-[#123458] mb-8 opacity-75">以下のフォームに入力して、学習項目を登録・編集してください</p>
+
+    <!-- Form Container -->
+    <!-- Styled form with better visual hierarchy and responsive design -->
+    <form th:action="@{/}" method="post" th:object="${learningSubjectForm}" class="bg-white rounded-lg shadow-md p-6 md:p-8">
+      <!-- ID Field (Read-only) -->
+      <div class="mb-8 pb-6 border-b border-[#d4c9be]" th:if="${learningSubjectForm.id}">
+        <label for="id" class="block text-sm font-semibold text-[#030303] mb-3">ID</label>
+        <div class="bg-[#f1efec] px-4 py-3 rounded border border-[#d4c9be] text-[#123458]">
+          <span th:text="*{id}">ー</span>
+        </div>
+      </div>
+      <input type="hidden" th:field="*{id}">
+      <input type="hidden" th:field="*{userId}">
+
+      <!-- Subject Name Field -->
+      <div class="mb-8">
+        <label for="name" class="block text-sm font-semibold text-[#030303] mb-3">項目名 <span class="text-red-500">*</span></label>
+        <input type="text" id="name" name="name" th:value="*{name}" 
+          class="w-full px-4 py-3 border-2 border-[#d4c9be] rounded-lg focus:outline-none focus:border-[#123458] focus:ring-2 focus:ring-[#123458] focus:ring-opacity-20 text-[#030303] placeholder-[#d4c9be] transition-all"
+          placeholder="学習項目の名前を入力してください">
+        <div th:if="${#fields.hasErrors('name')}" class="mt-2">
+          <p th:each="err : ${#fields.errors('name')}" class="text-red-600 text-sm font-medium" th:text="${err}"></p>
+        </div>
+      </div>
+
+      <!-- Description Field -->
+      <div class="mb-8">
+        <label for="description" class="block text-sm font-semibold text-[#030303] mb-3">説明</label>
+        <textarea id="description" name="description" rows="4"
+          class="w-full px-4 py-3 border-2 border-[#d4c9be] rounded-lg focus:outline-none focus:border-[#123458] focus:ring-2 focus:ring-[#123458] focus:ring-opacity-20 text-[#030303] placeholder-[#d4c9be] transition-all resize-none"
+          placeholder="学習項目の説明を入力してください" th:text="*{description}"></textarea>
+        <div th:if="${#fields.hasErrors('description')}" class="mt-2">
+          <p th:each="err : ${#fields.errors('description')}" class="text-red-600 text-sm font-medium" th:text="${err}"></p>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex flex-col md:flex-row gap-3 md:gap-4 pt-6">
+        <!-- Update/Create Mode Specific Buttons -->
+        <div th:if="${session.mode == 'update'}" class="w-full flex flex-col md:flex-row gap-3">
+          <button type="submit" th:formaction="@{/subject/update}" 
+            class="flex-1 px-6 py-3 bg-[#123458] text-white font-semibold rounded-lg transition-all hover:bg-[#030303] shadow-md hover:shadow-lg">
+            更新
+          </button>
+          <button type="submit" th:formaction="@{/subject/__${learningSubjectForm.id}__/delete}" 
+            onclick="return confirm('学習項目を削除すると、紐づいている学習記録も削除されます。\n本当に削除しますか？');"
+            class="flex-1 px-6 py-3 bg-red-600 text-white font-semibold rounded-lg transition-all hover:bg-red-700 shadow-md hover:shadow-lg">
+            削除
+          </button>
+          <button type="submit" th:formaction="@{/subject/cancel}" 
+            class="flex-1 md:flex-none px-6 py-3 bg-[#d4c9be] text-[#030303] font-semibold rounded-lg transition-all hover:bg-[#123458] hover:text-white shadow-sm hover:shadow-md">
+            キャンセル
+          </button>
+        </div>
+
+        <!-- Create Mode Buttons -->
+        <div th:unless="${session.mode == 'update'}" class="w-full flex flex-col md:flex-row gap-3">
+          <button type="submit" th:formaction="@{/subject/create/do}" 
+            class="flex-1 px-6 py-3 bg-[#123458] text-white font-semibold rounded-lg transition-all hover:bg-[#030303] shadow-md hover:shadow-lg">
+            登録
+          </button>
+          <button type="submit" th:formaction="@{/subject/cancel}" 
+            class="flex-1 md:flex-none px-6 py-3 bg-[#d4c9be] text-[#030303] font-semibold rounded-lg transition-all hover:bg-[#123458] hover:text-white shadow-sm hover:shadow-md">
+            キャンセル
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</body>
+</html>

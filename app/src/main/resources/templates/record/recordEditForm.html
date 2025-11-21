@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" th:href="@{/css/output.css}">
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+  <title>学習記録の編集フォーム | The Pomo - 学習時間記録アプリ</title>
+</head>
+<script th:src="@{/js/menu.js}"></script>
+<body class="bg-[#f1efec] text-[#123458]">
+  <!-- Header Fragment -->
+  <div th:replace="~{fragments/header :: header}"></div>
+
+  <!-- User Menu Bar Fragment -->
+  <div th:replace="~{fragments/userMenu :: user-menu}"></div>
+
+  <!-- Main Content -->
+  <main class="max-w-4xl mx-auto py-8 px-4 md:px-6 mt-20 md:mt-0">
+    <div class="bg-white rounded-lg shadow-lg p-6 md:p-10">
+      <!-- Page title with refined styling -->
+      <h1 class="text-3xl md:text-4xl font-bold text-[#030303] text-center mb-8">学習記録を編集</h1>
+
+      <form th:action="@{/}" method="post" th:object="${record}" class="space-y-6">
+        <!-- Hidden ID field -->
+        <div class="mb-8 pb-6 border-b border-[#d4c9be]" th:if="${record.id}">
+          <label for="id" class="block text-sm font-semibold text-[#030303] mb-3">ID</label>
+          <div class="bg-[#f1efec] px-4 py-3 rounded border border-[#d4c9be] text-[#123458]">
+            <span th:text="*{id}">ー</span>
+            <input type="hidden" th:field="*{id}">
+          </div>
+        </div>
+
+        <!-- Learning Subject Select -->
+        <div>
+          <label for="learningSubjectId" class="block text-sm font-semibold text-[#123458] mb-3">学習項目</label>
+          <select 
+            th:field="*{learningSubjectId}" 
+            id="learningSubjectId"
+            class="w-full border-2 border-[#d4c9be] rounded-lg px-4 py-3 text-[#123458] bg-white focus:outline-none focus:border-[#123458] focus:ring-2 focus:ring-[#123458] focus:ring-opacity-30 transition-all"
+            th:classappend="${#fields.hasErrors('learningSubjectId')} ? 'border-red-500' : ''">
+            <option 
+              th:each="subject : ${lSubject}"
+              th:value="${subject.id}"
+              th:text="${subject.name}"
+              th:selected="${subject.id == selectedValue}">
+            </option>
+          </select>
+          <div th:if="${#fields.hasErrors('learningSubjectId')}" class="text-red-600 text-sm mt-2" th:errors="*{learningSubjectId}"></div>
+        </div>
+
+        <!-- Date Field -->
+        <div>
+          <label for="date" class="block text-sm font-semibold text-[#123458] mb-3">日付</label>
+          <input 
+            type="date" 
+            id="date" 
+            name="date" 
+            th:value="*{date}"
+            class="w-full border-2 border-[#d4c9be] rounded-lg px-4 py-3 text-[#123458] bg-white focus:outline-none focus:border-[#123458] focus:ring-2 focus:ring-[#123458] focus:ring-opacity-30 transition-all">
+        </div>
+
+        <!-- Study Time (Duration) -->
+        <div>
+          <label for="sumTime" class="block text-sm font-semibold text-[#123458] mb-3">学習時間（HH:MM形式）</label>
+          <input 
+            type="time" 
+            th:field="*{sumTime}"
+            id="sumTime"
+            class="w-full border-2 border-[#d4c9be] rounded-lg px-4 py-3 text-[#123458] bg-white focus:outline-none focus:border-[#123458] focus:ring-2 focus:ring-[#123458] focus:ring-opacity-30 transition-all manual-input-group">
+          <span id="timeToPomodoroNotice" class="text-sm text-[#123458] mt-2 inline-block"></span>
+        </div>
+
+        <!-- Pomodoro Checkbox -->
+        <div class="flex items-center gap-3 bg-[#f1efec] p-4 rounded-lg border border-[#d4c9be]">
+          <input 
+            type="checkbox" 
+            th:field="*{usesPomodoro}" 
+            id="usesPomodoro"
+            class="w-5 h-5 cursor-pointer accent-[#123458] rounded">
+          <label for="usesPomodoro" class="text-sm font-semibold text-[#123458] cursor-pointer">学習時間をポモドーロに換算する</label>
+        </div>
+
+        <!-- Pomodoro Count -->
+        <div>
+          <label for="pomodoro" class="block text-sm font-semibold text-[#123458] mb-3">ポモドーロ数</label>
+          <input 
+            type="number" 
+            id="pomodoro" 
+            placeholder="ポモドーロ数を入力" 
+            th:field="*{pomodoro}"
+            class="w-full border-2 border-[#d4c9be] rounded-lg px-4 py-3 text-[#123458] bg-white focus:outline-none focus:border-[#123458] focus:ring-2 focus:ring-[#123458] focus:ring-opacity-30 transition-all manual-input-group"
+            min="1" 
+            step="1"
+            th:value="*{pomodoro}"
+            oninput="this.value = this.value.replace(/[^1-9\d]/g, '');">
+          <span id="pomodoroToTimeNotice" class="text-sm text-[#123458] mt-2 inline-block"></span>
+        </div>
+
+        <!-- Memo Field -->
+        <div>
+          <label for="memo" class="block text-sm font-semibold text-[#123458] mb-3">メモ</label>
+          <input 
+            type="text" 
+            id="memo"
+            name="memo" 
+            th:value="*{memo}"
+            placeholder="学習内容のメモを入力（任意）"
+            class="w-full border-2 border-[#d4c9be] rounded-lg px-4 py-3 text-[#123458] bg-white focus:outline-none focus:border-[#123458] focus:ring-2 focus:ring-[#123458] focus:ring-opacity-30 transition-all">
+          <div th:if="${#fields.hasErrors('memo')}" class="text-red-600 text-sm mt-2" th:errors="*{memo}"></div>
+        </div>
+
+        <!-- Public Checkbox -->
+        <div class="flex items-center gap-3 bg-[#f1efec] p-4 rounded-lg border border-[#d4c9be]">
+          <input 
+            type="checkbox" 
+            th:field="*{isPublished}" 
+            id="isPublished"
+            class="w-5 h-5 cursor-pointer accent-[#123458] rounded">
+          <label for="isPublished" class="text-sm font-semibold text-[#123458] cursor-pointer">この記録をみんなに公開する</label>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex flex-col md:flex-row gap-4 pt-6 border-t border-[#d4c9be]">
+          <button 
+            type="button" 
+            id="resetButton" 
+            class="flex-1 bg-[#d4c9be] hover:bg-[#c4b5a8] text-[#030303] font-semibold py-3 px-6 rounded-lg transition-colors">
+            学習時間をリセット
+          </button>
+          <button 
+            type="submit" 
+            th:formaction="@{/record/id/__${record.id}__/update}" 
+            class="flex-1 bg-[#123458] hover:bg-[#0d1f36] text-white font-semibold py-3 px-6 rounded-lg transition-colors">
+            更新
+          </button>
+          <button 
+            type="submit" 
+            th:formaction="@{/record/id/__${record.id}__/delete}" 
+            class="flex-1 bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors"
+            onclick="return confirm('学習記録を削除します。\n本当に削除しますか？');">
+            削除
+          </button>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <script th:src="@{/js/record-calculator.js}"></script>
+</body>
+</html>

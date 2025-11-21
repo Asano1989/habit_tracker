@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8">
+  <meta property="og:url" content="https://the-pomo.asnpp.com/" />
+  <meta property="og:title" content="The Pomo - 学習時間記録アプリ" />
+  <meta property="og:site_name" content="The Pomo - 学習時間記録アプリ" />
+  <meta property="og:type" content="article" />
+  <meta property="og:image" content="https://the-pomo.asnpp.com/image/ThePomoOgp.png" />
+</head>
+<body>
+  <!-- Converted to Tailwind classes -->
+  <header th:fragment="header" class="sticky top-0 z-50 bg-[#d4c9be] shadow-md border-b border-[#d4c9be]">
+    <div class="flex justify-between items-center px-4 md:px-8 py-3 md:py-4 max-w-7xl mx-auto">
+      <!-- Left: Hamburger Menu (for logged-in users) -->
+      <div class="flex-shrink-0">
+        <button class="hamburger-btn md:hidden flex flex-col gap-1.5 bg-transparent border-0 cursor-pointer p-2 -ml-2" id="hamburger-btn" sec:authorize="isAuthenticated()">
+          <span class="hamburger-line w-6 h-0.2 bg-[#123458] transition-all duration-300"></span>
+          <span class="hamburger-line w-6 h-0.2 bg-[#123458] transition-all duration-300"></span>
+          <span class="hamburger-line w-6 h-0.2 bg-[#123458] transition-all duration-300"></span>
+        </button>
+      </div>
+
+      <!-- Center: Logo/Title -->
+      <div class="flex-1 text-center">
+        <a th:href="@{/}"><img th:src="@{/image/ThePomoHeaderLogo.png}" class="h-10 w-auto md:h-12 lg:h-14 object-contain" width="180"></a>
+      </div>
+
+      <!-- Right: Auth Menu -->
+      <div class="flex-shrink-0">
+        <nav class="flex items-center">
+          <div sec:authorize="isAnonymous()" class="flex items-center gap-2 md:gap-3">
+            <a th:href="@{/signup}" class="text-[#123458] text-sm md:text-base font-medium px-2 md:px-3 py-2 rounded transition-colors hover:text-white hover:bg-[#123458]">新規登録</a>
+            <span class="text-[#123458] opacity-50">|</span>
+            <a th:href="@{/login}" class="text-[#123458] text-sm md:text-base font-medium px-2 md:px-3 py-2 rounded transition-colors hover:text-white hover:bg-[#123458]">ログイン</a>
+          </div>
+          <div sec:authorize="isAuthenticated()" class="flex items-center gap-2 md:gap-3">
+            <a th:href="@{/home}" class="text-[#123458] text-sm md:text-base font-medium px-2 md:px-3 py-2 rounded transition-colors hover:text-white hover:bg-[#123458]">ユーザーホーム</a>
+            <span class="text-[#123458] opacity-50">|</span>
+            <form method="post" th:action="@{/logout}" class="inline">
+              <button type="submit" class="text-[#123458] text-sm md:text-base font-medium px-2 md:px-3 py-2 rounded transition-colors hover:text-white hover:bg-[#123458] bg-transparent border-0 cursor-pointer">ログアウト</button>
+            </form>
+          </div>
+        </nav>
+      </div>
+    </div>
+
+    <!-- Sidebar Menu (for logged-in users on mobile) -->
+    <!-- Sidebar menu hidden by default, shown on mobile only -->
+    <nav class="sidebar-menu fixed left-0 top-20 w-64 h-[calc(100vh-80px)] bg-[#f1efec] border-r-2 border-[#d4c9be] overflow-y-auto z-40 transition-transform duration-300 -translate-x-full hidden md:hidden" id="sidebar-menu" sec:authorize="isAuthenticated()">
+      <ul class="list-none p-0 m-0 py-4">
+        <li class="border-b border-[#d4c9be]"><a th:href="@{/record/create/form}" class="block px-6 py-4 text-[#123458] no-underline font-medium transition-all border-l-4 border-transparent hover:bg-[#d4c9be] hover:text-[#123458] hover:border-l-[#123458] hover:pl-7">新しい記録を登録</a></li>
+        <li class="border-b border-[#d4c9be]"><a th:href="@{/record}" class="block px-6 py-4 text-[#123458] no-underline font-medium transition-all border-l-4 border-transparent hover:bg-[#d4c9be] hover:text-[#123458] hover:border-l-[#123458] hover:pl-7">学習の記録一覧</a></li>
+        <li class="border-b border-[#d4c9be]"><a th:href="@{/subject}" class="block px-6 py-4 text-[#123458] no-underline font-medium transition-all border-l-4 border-transparent hover:bg-[#d4c9be] hover:text-[#123458] hover:border-l-[#123458] hover:pl-7">学習の項目一覧</a></li>
+        <li class="border-b border-[#d4c9be]"><a th:href="@{/user}" class="block px-6 py-4 text-[#123458] no-underline font-medium transition-all border-l-4 border-transparent hover:bg-[#d4c9be] hover:text-[#123458] hover:border-l-[#123458] hover:pl-7">ユーザー情報</a></li>
+        <li class="border-b border-[#d4c9be]"><a th:href="@{/everyone}" class="block px-6 py-4 text-[#123458] no-underline font-medium transition-all border-l-4 border-transparent hover:bg-[#d4c9be] hover:text-[#123458] hover:border-l-[#123458] hover:pl-7">みんなの記録</a></li>
+      </ul>
+    </nav>
+  </header>
+<script th:src="@{/js/menu.js}"></script>
+</body>
+</html>
