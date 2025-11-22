@@ -94,7 +94,9 @@ public class RecordService {
         Integer pomodoro = 0;
         if(recordList.size() > 0) {
             for(Record record : recordList) {
-                pomodoro += record.getPomodoro();
+                if (record.getPomodoro() != null) {
+                    pomodoro += record.getPomodoro();
+                }
             }
         }
         return pomodoro;
